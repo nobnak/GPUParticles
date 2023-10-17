@@ -2,13 +2,14 @@
 #pragma kernel Init
 #pragma kernel Add
 #pragma kernel Update
+#pragma kernel Index
 
 // Threads
 uint _ThreadCount;
 
 // Index Pool
-AppendStructuredBuffer<uint> _IndexWaste;
-ConsumeStructuredBuffer<uint> _IndexPool;
+AppendStructuredBuffer<uint> _IndexPoolA;
+ConsumeStructuredBuffer<uint> _IndexPoolC;
 
 // Particles
 #include "../Scripts/Data/Particle.cs.hlsl"
@@ -24,14 +25,14 @@ void Init (uint3 id : SV_DispatchThreadID) {
 	if (_ThreadCount <= id.x) return;
 
 	_Particles[id.x] = (Particle)0;
-	_IndexWaste.Append(id.x);
+	_IndexPoolA.Append(id.x);
 }
 
 [numthreads(1,1,1)]
 void Add (uint3 id : SV_DispatchThreadID) {
 	if (_ThreadCount <= id.x) return;
 
-	uint index = _IndexPool.Consume();
+	uint index = _IndexPoolC.Consume();
 	_Particles[index] = _ParticlesAdd[id.x];
 }
 
@@ -56,10 +57,22 @@ void Update(uint3 id : SV_DispatchThreadID) {
 
 	if (particle.duration <= 0) {
 		// Add the index to the pool
-		_IndexWaste.Append(id.x);
+		_IndexPoolA.Append(id.x);
 		particle.activity = 0;
 	}
 
 	// Write the particle back
 	_Particles[id.x] = particle;
+}
+
+[numthreads(64, 1, 1)]
+void Index(uint3 id : SV_DispatchThreadID) {
+	if (_ThreadCount <= id.x) return;
+
+	// Get the particle
+	Particle particle = _Particles[id.x];
+	if (particle.activity == 0) return;
+
+	// Add the index to the pool
+	_IndexPoolA.Append(id.x);
 }

@@ -53,10 +53,11 @@ namespace GPUParticleSystem.Tests {
         [Test]
         public void TestGPUParticleClass() {
             var count_add = 10;
+            var duration = 10f;
             using var ps = new GPUParticles();
 
             ps.Init();
-            ps.Update();
+            ps.Update(0f);
 
             var particles_add = new List<Particle>();
             for (var i = 0; i < count_add; i++) {
@@ -64,7 +65,7 @@ namespace GPUParticleSystem.Tests {
                     activity = 1,
                     position = new float3(i, 0, 0),
                     velocity = new float3(0, 0, 0),
-                    duration = 10f,
+                    duration = duration,
                 };
                 particles_add.Add(p);
             }
@@ -72,6 +73,7 @@ namespace GPUParticleSystem.Tests {
 
             var count_indexPool = ps.CountIndexPool();
             Assert.AreEqual(count_add, ps.Capacity - (int)count_indexPool);
+            Assert.AreEqual(count_add, ps.CountActiveParticles());
 
             var allParticles = ps.GetParticles();
             var log_particleList = new StringBuilder("Particles:\n");
@@ -86,6 +88,12 @@ namespace GPUParticleSystem.Tests {
                 particles_add.RemoveAt(indexOfAddList);
             }
             Assert.AreEqual(0, particles_add.Count);
+
+            ps.Update(duration * 2f);
+            var count_indexPool2 = ps.CountIndexPool();
+            Assert.AreEqual(ps.Capacity, count_indexPool2);
+            Assert.AreEqual(0, ps.CountActiveParticles());
+
             Debug.Log(log_particleList);
         }
 

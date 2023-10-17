@@ -13,6 +13,7 @@ namespace GPUParticleSystem.Examples {
 
         protected Random rand;
         protected RenderParams renderParams;
+        protected MaterialPropertyBlock matProps;
         protected GPUParticles gpart;
 
         #region unity
@@ -20,15 +21,15 @@ namespace GPUParticleSystem.Examples {
             rand = new((uint)GetInstanceID());
             gpart = new GPUParticles();
 
+            matProps = new();
             renderParams = new(links.material) {
                 layer = gameObject.layer,
                 camera = links.targetCamera,
                 worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000),
+                matProps = matProps,
             };
 
             StartCoroutine(PeriodicReport());
-
-            Debug.Log($"OnEnable: pool={gpart.CountIndexPool()} active={gpart.CountActiveParticles()}");
         }
         void Update() {
             var emitter = links.emitter;
@@ -45,6 +46,8 @@ namespace GPUParticleSystem.Examples {
             }
 
             gpart.Update(Time.deltaTime);
+
+            matProps.SetBuffer(P_Particles, gpart.Particles);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
         }
         void OnDisable() {
@@ -72,6 +75,8 @@ namespace GPUParticleSystem.Examples {
         #region declarations
         public static readonly float3 Emitter_Min = -0.5f * new float3(1, 1, 1);
         public static readonly float3 Emitter_Max = 0.5f * new float3(1, 1, 1);
+
+        public static readonly int P_Particles = Shader.PropertyToID("_Particles");
 
         [System.Serializable]
         public class Links {

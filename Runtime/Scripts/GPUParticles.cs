@@ -130,6 +130,7 @@ namespace GPUParticleSystem {
 
         #region properties
         public int Capacity => capacity;
+        public GraphicsBuffer Particles => gb_particles;
         #endregion
 
         public Particle[] GetParticles() {

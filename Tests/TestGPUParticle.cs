@@ -59,21 +59,29 @@ namespace GPUParticleSystem.Tests {
             ps.Init();
             ps.Update(0f);
 
-            var particles_add = new List<Particle>();
-            for (var i = 0; i < count_add; i++) {
-                var p = new Particle() {
-                    activity = 1,
-                    position = new float3(i, 0, 0),
-                    velocity = new float3(0, 0, 0),
-                    duration = duration,
-                };
-                particles_add.Add(p);
-            }
-            ps.Add(particles_add.ToArray());
+            var particles_allAdds = new List<Particle>();
+            for (var j = 0; j < 10; j++) {
+                var particles_add = new List<Particle>();
+                for (var i = 0; i < count_add; i++) {
+                    var p = new Particle() {
+                        activity = 1,
+                        position = new float3(i, j, 0),
+                        velocity = new float3(0, 0, 0),
+                        duration = duration,
+                    };
+                    particles_add.Add(p);
+                }
 
-            var count_indexPool = ps.CountIndexPool();
-            Assert.AreEqual(count_add, ps.Capacity - (int)count_indexPool);
-            Assert.AreEqual(count_add, ps.CountActiveParticles());
+                ps.Add(particles_add.ToArray());
+                particles_allAdds.AddRange(particles_add);
+            }
+
+            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - (int)ps.CountIndexPool());
+            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticles());
+
+            ps.Update(duration * 0.1f);
+            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - (int)ps.CountIndexPool());
+            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticles());
 
             var allParticles = ps.GetParticles();
             var log_particleList = new StringBuilder("Particles:\n");
@@ -83,18 +91,17 @@ namespace GPUParticleSystem.Tests {
 
                 log_particleList.AppendLine($"  {i}:\tact={p.activity}, pos={p.position}");
 
-                var indexOfAddList = particles_add.FindIndex(v => v.position.Equals(p.position));
+                var indexOfAddList = particles_allAdds.FindIndex(v => v.position.Equals(p.position));
                 Assert.AreNotEqual(-1, indexOfAddList);
-                particles_add.RemoveAt(indexOfAddList);
+                particles_allAdds.RemoveAt(indexOfAddList);
             }
-            Assert.AreEqual(0, particles_add.Count);
+            Assert.AreEqual(0, particles_allAdds.Count);
 
             ps.Update(duration * 2f);
-            var count_indexPool2 = ps.CountIndexPool();
-            Assert.AreEqual(ps.Capacity, count_indexPool2);
+            Assert.AreEqual(ps.Capacity, ps.CountIndexPool());
             Assert.AreEqual(0, ps.CountActiveParticles());
 
-            Debug.Log(log_particleList);
+            //Debug.Log(log_particleList);
         }
 
         private static int GetDispatchGroupSize_x(int count, uint cc_x) {

@@ -25,10 +25,14 @@ namespace GPUParticleSystem.Examples {
                 camera = links.targetCamera,
                 worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000),
             };
+
+            StartCoroutine(PeriodicReport());
+
+            Debug.Log($"OnEnable: pool={gpart.CountIndexPool()} active={gpart.CountActiveParticles()}");
         }
         void Update() {
             var emitter = links.emitter;
-            if (emitter != null && Input.GetMouseButton(0)) {
+            if (emitter != null && Input.GetMouseButtonDown(0)) {
                 var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
                 var dir = math.mul(rand.NextQuaternionRotation(), new float3(0, 0, 1));
                 var p = new Particle() {
@@ -37,18 +41,30 @@ namespace GPUParticleSystem.Examples {
                     velocity = presets.init_speed * dir,
                     duration = presets.duration,
                 };
-                gpart.Add(p);
+                gpart.Add(p); 
             }
 
             gpart.Update(Time.deltaTime);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
-
-            Debug.Log($"Active particles: count={gpart.CountActiveParticles()} pool={gpart.CountIndexPool()}");
         }
         void OnDisable() {
             if (gpart != null) {
                 gpart.Dispose();
                 gpart = null;
+            }
+        }
+        #endregion
+
+        #region methods
+        IEnumerator PeriodicReport() {
+            while (enabled) {
+                yield return new WaitForSeconds(1f);
+                var activeCount = gpart.CountActiveParticles();
+                var poolCount = gpart.CountIndexPool();
+                var capacity = gpart.Capacity;
+                var activeRatio = (float)activeCount / capacity;
+                var activeRatioStr = activeRatio.ToString("P2");
+                Debug.Log($"Particles: ratio={activeCount}/{capacity} ({activeRatioStr}) active={activeCount} pool={poolCount} capacity={capacity} ");
             }
         }
         #endregion

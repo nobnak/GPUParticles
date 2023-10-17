@@ -11,6 +11,9 @@ uint _ThreadCount;
 AppendStructuredBuffer<uint> _IndexPoolA;
 ConsumeStructuredBuffer<uint> _IndexPoolC;
 
+// Active IDs
+AppendStructuredBuffer<uint> _ActiveIndexesA;
+
 // Particles
 #include "../Scripts/Data/Particle.cs.hlsl"
 RWStructuredBuffer<Particle> _Particles;
@@ -74,5 +77,5 @@ void Index(uint3 id : SV_DispatchThreadID) {
 	if (particle.activity == 0) return;
 
 	// Add the index to the pool
-	_IndexPoolA.Append(id.x);
+	_ActiveIndexesA.Append(id.x);
 }

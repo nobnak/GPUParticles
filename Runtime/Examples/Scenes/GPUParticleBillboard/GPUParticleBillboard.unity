@@ -172,7 +172,7 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 92dbd3a878a59fb4c9e897bbec476429, type: 2}
     emitter: {fileID: 1628756244}
   presets:
-    duration: 60
+    duration: 5
     init_speed: 1
 --- !u!1 &725858046
 GameObject:

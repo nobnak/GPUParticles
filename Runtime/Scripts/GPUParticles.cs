@@ -47,6 +47,8 @@ namespace GPUParticleSystem {
             cs.GetKernelThreadGroupSizes(k_add, out g_add, out _, out _);
             cs.GetKernelThreadGroupSizes(k_update, out g_update, out _, out _);
             cs.GetKernelThreadGroupSizes(k_index, out g_index, out _, out _);
+
+            Init();
         }
 
         public void Dispose() {
@@ -86,6 +88,7 @@ namespace GPUParticleSystem {
             var dispatchCount = DispatcCount(count, g_init);
             cs.SetInt(P_ThreadCount, count);
             cs.Dispatch(k_init, dispatchCount, 1, 1);
+            Debug.Log($"Init: dispatch={dispatchCount}");
         }
         public void Add(params Particle[] particles) {
             //GraphicsBuffer.CopyCount(gb_indexPool, gb_count, 0);
@@ -116,7 +119,7 @@ namespace GPUParticleSystem {
         public void Index() {
             gb_activeIDs.SetCounterValue(0);
             cs.SetBuffer(k_index, P_Particles, gb_particles);
-            cs.SetBuffer(k_index, P_IndexPoolA, gb_activeIDs);
+            cs.SetBuffer(k_index, P_ActiveIndexesA, gb_activeIDs);
 
             var count = gb_particles.count;
             var dispatchCount = DispatcCount(count, g_index);
@@ -168,6 +171,9 @@ namespace GPUParticleSystem {
         // Index Pool
         public static readonly int P_IndexPoolA = Shader.PropertyToID("_IndexPoolA");
         public static readonly int P_IndexPoolC = Shader.PropertyToID("_IndexPoolC");
+
+        // Active IDs
+        public static readonly int P_ActiveIndexesA = Shader.PropertyToID("_ActiveIndexesA");
 
         // Particles
         public static readonly int P_Particles = Shader.PropertyToID("_Particles");

@@ -4,8 +4,9 @@
 #pragma kernel Update
 #pragma kernel Index
 
-// Threads
+// Counter
 uint _ThreadCount;
+StructuredBuffer<uint> _CounterBuffer;
 
 // Index Pool
 AppendStructuredBuffer<uint> _IndexPoolA;
@@ -34,6 +35,7 @@ void Init (uint3 id : SV_DispatchThreadID) {
 [numthreads(1,1,1)]
 void Add (uint3 id : SV_DispatchThreadID) {
 	if (_ThreadCount <= id.x) return;
+	if (_CounterBuffer[0] <= id.x) return;
 
 	uint index = _IndexPoolC.Consume();
 	_Particles[index] = _ParticlesAdd[id.x];

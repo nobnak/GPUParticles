@@ -24,7 +24,6 @@ namespace GPUParticleSystem.Examples {
             matProps = new();
             renderParams = new(links.material) {
                 layer = gameObject.layer,
-                camera = links.targetCamera,
                 worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000),
                 matProps = matProps,
             };
@@ -33,7 +32,7 @@ namespace GPUParticleSystem.Examples {
         }
         void Update() {
             var emitter = links.emitter;
-            if (emitter != null && Input.GetMouseButtonDown(0)) {
+            if (emitter != null && Input.GetMouseButton(0)) {
                 var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
                 var dir = math.mul(rand.NextQuaternionRotation(), new float3(0, 0, 1));
                 var p = new Particle() {
@@ -80,7 +79,6 @@ namespace GPUParticleSystem.Examples {
 
         [System.Serializable]
         public class Links {
-            public Camera targetCamera;
             public Material material;
             public Transform emitter;
         }

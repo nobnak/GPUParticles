@@ -29,7 +29,7 @@ namespace GPUParticleSystem {
             gb_particles = new GraphicsBuffer(GraphicsBuffer.Target.Structured, capacity, Marshal.SizeOf<Particle>());
             gb_indexPool = new GraphicsBuffer(GraphicsBuffer.Target.Append, capacity, Marshal.SizeOf<uint>());
             gb_add = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 256, Marshal.SizeOf<Particle>());
-            gb_count = new GraphicsBuffer(GraphicsBuffer.Target.Raw, 4, Marshal.SizeOf<uint>());
+            gb_count = new GraphicsBuffer(GraphicsBuffer.Target.Raw, 8, Marshal.SizeOf<uint>());
             gb_activeIDs = new GraphicsBuffer(GraphicsBuffer.Target.Append, capacity, Marshal.SizeOf<uint>());
 
             cs = Resources.Load<ComputeShader>(PathToCS);
@@ -74,7 +74,7 @@ namespace GPUParticleSystem {
             }
         }
 
-        #region kernsl
+        #region kernels
         public void Init() {
             gb_indexPool.SetCounterValue(0);
 
@@ -88,16 +88,16 @@ namespace GPUParticleSystem {
             var dispatchCount = DispatcCount(count, g_init);
             cs.SetInt(P_ThreadCount, count);
             cs.Dispatch(k_init, dispatchCount, 1, 1);
-            Debug.Log($"Init: dispatch={dispatchCount}");
         }
         public void Add(params Particle[] particles) {
-            //GraphicsBuffer.CopyCount(gb_indexPool, gb_count, 0);
+            GraphicsBuffer.CopyCount(gb_indexPool, gb_count, (int)CounterByteOffset.IndexPool);
 
             gb_add.SetData(particles);
             cs.SetBuffer(k_add, P_ParticlesAdd, gb_add);
             cs.SetBuffer(k_add, P_Particles, gb_particles);
             cs.SetBuffer(k_add, P_IndexPoolC, gb_indexPool);
             cs.SetBuffer(k_add, P_IndexPoolA, gb_indexPool);
+            cs.SetBuffer(k_add, P_CounterBuffer, gb_count);
 
             var count = particles.Length;
             var dispatchCount = DispatcCount(count, g_add);
@@ -140,17 +140,17 @@ namespace GPUParticleSystem {
             return particles;
         }
         public uint CountIndexPool() {
-            GraphicsBuffer.CopyCount(gb_indexPool, gb_count, 0);
-            var count = new uint[1];
+            GraphicsBuffer.CopyCount(gb_indexPool, gb_count, (int)CounterByteOffset.IndexPool);
+            var count = new uint[2];
             gb_count.GetData(count);
             return count[0];
         }
         public uint CountActiveParticles() {
             Index();
-            GraphicsBuffer.CopyCount(gb_activeIDs, gb_count, 0);
-            var count = new uint[1];
+            GraphicsBuffer.CopyCount(gb_activeIDs, gb_count, (int)CounterByteOffset.ActiveIDs);
+            var count = new uint[2];
             gb_count.GetData(count);
-            return count[0];
+            return count[1];
         }
         #region methods
         public static int DispatcCount(int count, uint groupSize) {
@@ -166,8 +166,9 @@ namespace GPUParticleSystem {
         public const string K_Update = "Update";
         public const string k_Index = "Index";
 
-        // Threads
+        // Counter
         public static readonly int P_ThreadCount = Shader.PropertyToID("_ThreadCount");
+        public static readonly int P_CounterBuffer = Shader.PropertyToID("_CounterBuffer");
 
         // Index Pool
         public static readonly int P_IndexPoolA = Shader.PropertyToID("_IndexPoolA");
@@ -183,6 +184,8 @@ namespace GPUParticleSystem {
 
         // Time
         public static readonly int P_DeltaTime = Shader.PropertyToID("_DeltaTime");
+
+        public enum CounterByteOffset { IndexPool = 0, ActiveIDs = 4, }
         #endregion
     }
 }

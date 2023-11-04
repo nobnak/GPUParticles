@@ -168,7 +168,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   links:
-    targetCamera: {fileID: 2096473993}
     material: {fileID: 2100000, guid: 92dbd3a878a59fb4c9e897bbec476429, type: 2}
     emitter: {fileID: 1628756244}
   presets:
@@ -356,8 +355,8 @@ Camera:
   m_GameObject: {fileID: 2096473991}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.26486292, g: 0.29162705, b: 0.3773585, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

@@ -4,18 +4,19 @@
 
 #ifndef PARTICLE_CS_HLSL
 #define PARTICLE_CS_HLSL
-// Generated from Particle
+// Generated from GPUParticleSystem.Particle
 // PackingRules = Exact
 struct Particle
 {
     float3 position; // x: x y: y z: z 
     float3 velocity; // x: x y: y z: z 
     float duration;
+    float size;
     int activity;
 };
 
 //
-// Accessors for Particle
+// Accessors for GPUParticleSystem.Particle
 //
 float3 GetPosition(Particle value)
 {
@@ -28,6 +29,10 @@ float3 GetVelocity(Particle value)
 float GetDuration(Particle value)
 {
     return value.duration;
+}
+float GetSize(Particle value)
+{
+    return value.size;
 }
 int GetActivity(Particle value)
 {

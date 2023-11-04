@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace GPUParticleSystem {
@@ -133,24 +134,20 @@ namespace GPUParticleSystem {
         public GraphicsBuffer Particles => gb_particles;
         #endregion
 
-        public Particle[] GetParticles() {
+        public AsyncGPUReadbackRequest GetParticlesAsync() {
             var count = gb_particles.count;
-            var particles = new Particle[count];
-            gb_particles.GetData(particles);
-            return particles;
+            return AsyncGPUReadback.Request(gb_particles);
         }
-        public uint CountIndexPool() {
-            GraphicsBuffer.CopyCount(gb_indexPool, gb_count, (int)CounterByteOffset.IndexPool);
-            var count = new uint[2];
-            gb_count.GetData(count);
-            return count[0];
+        public AsyncGPUReadbackRequest CountIndexPoolAsync() {
+            var offset = (int)CounterByteOffset.IndexPool;
+            GraphicsBuffer.CopyCount(gb_indexPool, gb_count, offset);
+            return AsyncGPUReadback.Request(gb_count, Marshal.SizeOf<uint>(), offset);
         }
-        public uint CountActiveParticles() {
+        public AsyncGPUReadbackRequest CountActiveParticlesAsync() {
             Index();
-            GraphicsBuffer.CopyCount(gb_activeIDs, gb_count, (int)CounterByteOffset.ActiveIDs);
-            var count = new uint[2];
-            gb_count.GetData(count);
-            return count[1];
+            var offset = (int)CounterByteOffset.ActiveIDs;
+            GraphicsBuffer.CopyCount(gb_activeIDs, gb_count, offset);
+            return AsyncGPUReadback.Request(gb_count, Marshal.SizeOf<uint>(), offset);
         }
         #region methods
         public static int DispatcCount(int count, uint groupSize) {

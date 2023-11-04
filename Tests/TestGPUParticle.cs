@@ -1,3 +1,4 @@
+using GPUParticleSystem.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,10 +6,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace GPUParticleSystem.Tests {
 
     public class TestGPUParticle {
+
         // A Test behaves as an ordinary method
         [Test]
         public void TestCopyCountSimplePasses() {
@@ -76,14 +79,14 @@ namespace GPUParticleSystem.Tests {
                 particles_allAdds.AddRange(particles_add);
             }
 
-            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - (int)ps.CountIndexPool());
-            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticles());
+            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - ps.CountIndexPoolAsync().Sync<int>()[0]);
+            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticlesAsync().Sync<int>()[0]);
 
             ps.Update(duration * 0.1f);
-            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - (int)ps.CountIndexPool());
-            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticles());
+            Assert.AreEqual(particles_allAdds.Count, ps.Capacity - ps.CountIndexPoolAsync().Sync<int>()[0]);
+            Assert.AreEqual(particles_allAdds.Count, ps.CountActiveParticlesAsync().Sync<int>()[0]);
 
-            var allParticles = ps.GetParticles();
+            var allParticles = ps.GetParticlesAsync().Sync<Particle>();
             var log_particleList = new StringBuilder("Particles:\n");
             for (var i = 0; i < allParticles.Length; i++) {
                 var p = allParticles[i];
@@ -98,8 +101,8 @@ namespace GPUParticleSystem.Tests {
             Assert.AreEqual(0, particles_allAdds.Count);
 
             ps.Update(duration * 2f);
-            Assert.AreEqual(ps.Capacity, ps.CountIndexPool());
-            Assert.AreEqual(0, ps.CountActiveParticles());
+            Assert.AreEqual(ps.Capacity, ps.CountIndexPoolAsync().Sync<int>()[0]);
+            Assert.AreEqual(0, ps.CountActiveParticlesAsync().Sync<int>()[0]);
 
             //Debug.Log(log_particleList);
         }

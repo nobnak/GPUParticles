@@ -1,10 +1,15 @@
 Shader "Unlit/Particle-Unlit" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1,1,1,1)
         _Size ("Size", float) = 1
     }
     SubShader {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" "Queue" = "Transparent" }
+        Cull Off
+        ZWrite Off
+        ZTest LEqual
+        Blend One One
 
         Pass {
             CGPROGRAM
@@ -29,6 +34,8 @@ Shader "Unlit/Particle-Unlit" {
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+
+            float4 _Color;
 
             float _Size;
 
@@ -58,10 +65,11 @@ Shader "Unlit/Particle-Unlit" {
 				}
 
                 float3 center_wc = mul(unity_ObjectToWorld, float4(p.position, 1)).xyz;
+                float size = p.size * _Size;
 
                 for (int i = 0; i < 4; i++) {
                     float3 quadOffset_wc = mul(unity_CameraToWorld, quad[i]).xyz;
-                    float3 pos_wc = center_wc + (0.5 * _Size) * quadOffset_wc;
+                    float3 pos_wc = center_wc + (0.5 * size) * quadOffset_wc;
                     
 					v2f o;
 					o.vertex = mul(UNITY_MATRIX_VP, float4(pos_wc, 1));
@@ -72,9 +80,10 @@ Shader "Unlit/Particle-Unlit" {
                 stream.RestartStrip();
             }
 
-            fixed4 frag (v2f i) : SV_Target {
-                fixed4 col = tex2D(_MainTex, i.uv);
-                return col;
+            float4 frag (v2f i) : SV_Target {
+                float4 cmain = tex2D(_MainTex, i.uv);
+                float4 cout = cmain * _Color;
+                return cout;
             }
             ENDCG
         }

@@ -40,12 +40,12 @@ namespace GPUParticleSystem.Examples {
                     position = pos,
                     velocity = presets.init_speed * dir,
                     duration = presets.duration,
+                    size = rand.NextFloat(0.8f, 1.2f),
                 };
-                gpart.Add(p); 
+                gpart.Add(p);
             }
 
             gpart.Update(Time.deltaTime);
-
             matProps.SetBuffer(P_Particles, gpart.Particles);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
         }
@@ -58,15 +58,28 @@ namespace GPUParticleSystem.Examples {
         #endregion
 
         #region methods
-        IEnumerator PeriodicReport() {
+        IEnumerator PeriodicReport(float interval = 1f) {
             while (enabled) {
-                yield return new WaitForSeconds(1f);
-                var activeCount = gpart.CountActiveParticles();
-                var poolCount = gpart.CountIndexPool();
+                yield return new WaitForSeconds(interval);
+                var activeCountRequest = gpart.CountActiveParticlesAsync();
+                var poolCountRequest = gpart.CountIndexPoolAsync();
+                while (!activeCountRequest.done || !poolCountRequest.done)
+                    yield return null;
+
+                if (activeCountRequest.hasError || poolCountRequest.hasError) {
+                    Debug.LogError("GPUParticles: error counting particles");
+                    continue;
+                }
+
+                using var activeCountArray = activeCountRequest.GetData<uint>();
+                using var poolCountArray = poolCountRequest.GetData<uint>();
+                var activeCount = activeCountArray[0];
+                var poolCount = poolCountArray[0];
+
                 var capacity = gpart.Capacity;
                 var activeRatio = (float)activeCount / capacity;
                 var activeRatioStr = activeRatio.ToString("P2");
-                Debug.Log($"Particles: ratio={activeCount}/{capacity} ({activeRatioStr}) active={activeCount} pool={poolCount} capacity={capacity} ");
+                Debug.Log($"Particles: usage={activeRatioStr} ({activeCount}/{capacity})");
             }
         }
         #endregion

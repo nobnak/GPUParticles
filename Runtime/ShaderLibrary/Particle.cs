@@ -10,6 +10,7 @@ namespace GPUParticleSystem {
     public struct Particle {
         public float3 position;
         public float3 velocity;
+        public float lifetime;
         public float duration;
         public float size;
         public int activity;

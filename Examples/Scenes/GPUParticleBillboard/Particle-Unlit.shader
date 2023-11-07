@@ -27,10 +27,11 @@ Shader "Unlit/Particle-Unlit" {
             struct v2f {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float4 color : COLOR;
             };
 
-            #include "../../../Scripts/Data/Particle.cs.hlsl"
-            StructuredBuffer<Particle> _Particles;
+            #include "../../../Resources/RenderCommon.hlsl"
+            #define FADE 0.1
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -67,6 +68,10 @@ Shader "Unlit/Particle-Unlit" {
                 float3 center_wc = mul(unity_ObjectToWorld, float4(p.position, 1)).xyz;
                 float size = p.size * _Size;
 
+                float tot = p.lifetime;
+                float rem = p.duration;
+                float4 color = smoothstep(0, FADE, rem) * smoothstep(tot, tot - FADE, rem);
+
                 for (int i = 0; i < 4; i++) {
                     float3 quadOffset_wc = mul(unity_CameraToWorld, quad[i]).xyz;
                     float3 pos_wc = center_wc + (0.5 * size) * quadOffset_wc;
@@ -74,6 +79,7 @@ Shader "Unlit/Particle-Unlit" {
 					v2f o;
 					o.vertex = mul(UNITY_MATRIX_VP, float4(pos_wc, 1));
 					o.uv = TRANSFORM_TEX(quad_uv[i], _MainTex);
+                    o.color = color;
 					stream.Append(o);
 				}
 
@@ -82,7 +88,7 @@ Shader "Unlit/Particle-Unlit" {
 
             float4 frag (v2f i) : SV_Target {
                 float4 cmain = tex2D(_MainTex, i.uv);
-                float4 cout = cmain * _Color;
+                float4 cout = cmain * i.color * _Color;
                 return cout;
             }
             ENDCG

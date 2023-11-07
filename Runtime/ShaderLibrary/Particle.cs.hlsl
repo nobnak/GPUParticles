@@ -10,6 +10,7 @@ struct Particle
 {
     float3 position; // x: x y: y z: z 
     float3 velocity; // x: x y: y z: z 
+    float lifetime;
     float duration;
     float size;
     int activity;
@@ -25,6 +26,10 @@ float3 GetPosition(Particle value)
 float3 GetVelocity(Particle value)
 {
     return value.velocity;
+}
+float GetLifetime(Particle value)
+{
+    return value.lifetime;
 }
 float GetDuration(Particle value)
 {

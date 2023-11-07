@@ -52,6 +52,7 @@ namespace GPUParticleSystem {
             Init();
         }
 
+        #region IDisposable
         public void Dispose() {
             if (gb_particles != null) {
                 gb_particles.Dispose();
@@ -74,6 +75,7 @@ namespace GPUParticleSystem {
                 gb_activeIDs = null;
             }
         }
+        #endregion
 
         #region kernels
         public void Init() {

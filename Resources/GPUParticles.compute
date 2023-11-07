@@ -4,25 +4,9 @@
 #pragma kernel Update
 #pragma kernel Index
 
-// Counter
-uint _ThreadCount;
-StructuredBuffer<uint> _CounterBuffer;
 
-// Index Pool
-AppendStructuredBuffer<uint> _IndexPoolA;
-ConsumeStructuredBuffer<uint> _IndexPoolC;
+#include_with_pragmas "UpdateCommon.hlsl"
 
-// Active IDs
-AppendStructuredBuffer<uint> _ActiveIndexesA;
-
-// Particles
-#include "../Scripts/Data/Particle.cs.hlsl"
-RWStructuredBuffer<Particle> _Particles;
-RWStructuredBuffer<Particle> _ParticlesAdd;
-int _OperationMode;
-
-// Time
-float _DeltaTime;
 
 [numthreads(64, 1, 1)]
 void Init (uint3 id : SV_DispatchThreadID) {
@@ -53,7 +37,6 @@ void Update(uint3 id : SV_DispatchThreadID) {
 	switch (_OperationMode) {
 		default: {
 			// Update the particle
-			particle.position += particle.velocity * _DeltaTime;
 			particle.duration -= _DeltaTime;
 			break;
 		}

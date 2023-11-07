@@ -8,6 +8,7 @@ namespace GPUParticleSystem.Examples {
 
     public class GPUParticleBillboard : MonoBehaviour {
 
+        public Events events = new();
         public Links links = new();
         public Presets presets = new();
 
@@ -28,6 +29,8 @@ namespace GPUParticleSystem.Examples {
                 matProps = matProps,
             };
 
+            events.onGpuParticleSystemCreated?.Invoke(gpart);
+
             StartCoroutine(PeriodicReport());
         }
         void Update() {
@@ -40,6 +43,7 @@ namespace GPUParticleSystem.Examples {
                     position = pos,
                     velocity = presets.init_speed * dir,
                     duration = presets.duration,
+                    lifetime = presets.duration,
                     size = rand.NextFloat(0.8f, 1.2f),
                 };
                 gpart.Add(p);
@@ -51,6 +55,7 @@ namespace GPUParticleSystem.Examples {
         }
         void OnDisable() {
             if (gpart != null) {
+                events.onGpuParticleSystemCreated?.Invoke(null);
                 gpart.Dispose();
                 gpart = null;
             }
@@ -90,6 +95,14 @@ namespace GPUParticleSystem.Examples {
 
         public static readonly int P_Particles = Shader.PropertyToID("_Particles");
 
+        [System.Serializable]
+        public class Events {
+
+            public GPUParticlesEvent onGpuParticleSystemCreated = new();
+
+            [System.Serializable]
+            public class GPUParticlesEvent : UnityEngine.Events.UnityEvent<GPUParticles> { }
+        }
         [System.Serializable]
         public class Links {
             public Material material;

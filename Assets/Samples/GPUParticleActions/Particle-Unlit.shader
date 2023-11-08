@@ -34,11 +34,12 @@ Shader "Unlit/Particle-Unlit" {
             #define FADE 0.1
 
             sampler2D _MainTex;
+
+            CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
-
             float4 _Color;
-
             float _Size;
+            CBUFFER_END
 
             appdata vert(appdata v) {
                 return v;

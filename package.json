@@ -1,0 +1,20 @@
+{
+	"author": {
+		"name": "Nakata Nobuyuki",
+		"email": "nobu.nakata@gmail.com"
+	},
+	"name": "jp.nobnak.gpu_particles",
+	"displayName": "GPU Particles",
+	"version": "1.0.0",
+
+	"samples": {
+		"displayName": "Particle Actions",
+		"description": "Particle Editing Operation Samples",
+		"path": "Samples/GPUParticleActions"
+	},
+
+	"dependencies": {
+		"com.unity.mathematics": "1.2.6",
+		"com.unity.render-pipelines.core": "14.0.9"
+	}
+}

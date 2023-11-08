@@ -1,5 +1,5 @@
 {
-    "name": "GPUParticles.Examples",
+    "name": "GPUParticles.Samples.GPUParticleBillboard",
     "rootNamespace": "",
     "references": [
         "GUID:8a882f2332bb73744871b1d804f14ae7",

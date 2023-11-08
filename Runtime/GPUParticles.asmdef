@@ -3,9 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Unity.Mathematics",
-        "Unity.RenderPipelines.Core.Runtime",
-        "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,12 +1,10 @@
 using GPUParticleSystem.Util;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace GPUParticleSystem.Tests {
 

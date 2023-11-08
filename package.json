@@ -5,15 +5,7 @@
 	},
 	"name": "jp.nobnak.gpu_particles",
 	"displayName": "GPU Particles",
-	"version": "1.0.3",
-
-	"samples": [
-		{
-			"displayName": "Particle Actions",
-			"description": "Particle Editing Operation Samples",
-			"path": "Samples/GPUParticleActions"
-		}
-	],
+	"version": "1.0.4",
 
 	"dependencies": {
 		"com.unity.mathematics": "1.2.6",

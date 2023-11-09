@@ -23,7 +23,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         protected GPUParticles gpart;
 
         protected Dictionary<string, IAction> actions = new();
-        protected Coroutine coroutine;
+        protected Coroutine coLinearAction, coRotateAction;
 
         #region unity
         void OnEnable() {
@@ -80,18 +80,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
         }
         #endregion
 
-        #region interface
-        public void StartAction(IEnumerator enumerator) {
-            coroutine = StartCoroutine(enumerator);
-        }
-        public void StopAction() {
-            if (coroutine != null) {
-                StopCoroutine(coroutine);
-                coroutine = null;
-            }
-        }
-        #endregion
-
         #region methods
         IEnumerator PeriodicReport(float interval = 1f) {
             while (enabled) {
@@ -120,7 +108,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         #endregion
 
         #region actions
-        IEnumerator CoGenericAction<T>(float duration) where T : IAction {
+        IEnumerator CoGenericAction<T>(float duration = 360f) where T : IAction {
             var typeName = typeof(T).Name;
             if (!actions.TryGetValue(typeName, out var action)) {
                 Debug.LogError($"Action {typeName} not found");
@@ -137,11 +125,30 @@ namespace GPUParticleSystem.Samples.GPUActions {
             }
 
         }
-        IEnumerator CoLinearAction(float duration) {
+        IEnumerator CoLinearAction(float duration = 360f) {
             return CoGenericAction<LinearAction>(duration);
         }
-        IEnumerator CoRotateAction(float duration) {
+        IEnumerator CoRotateAction(float duration = 360f) {
             return CoGenericAction<RotateAction>(duration);
+        }
+
+        void StartLinearAction(float duration = 360f) {
+            StopAction(ref coLinearAction);
+            coLinearAction = StartCoroutine(CoLinearAction(duration));
+        }
+        void StartRotateAction(float duration = 360f) {
+            StopAction(ref coRotateAction);
+            coRotateAction = StartCoroutine(CoRotateAction(duration));
+        }
+        void StopAction(ref Coroutine coroutine) {
+            if (coroutine != null) {
+                StopCoroutine(coroutine);
+                coroutine = null;
+            }
+        }
+        void StopAllAction() {
+            StopAction(ref coLinearAction);
+            StopAction(ref coRotateAction);
         }
         #endregion
 
@@ -183,15 +190,13 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 if (t == null) return;
 
                 if (GUILayout.Button("Linear")) {
-                    t.StopAction();
-                    t.StartCoroutine(t.CoLinearAction(10f));
+                    t.StartLinearAction();
                 }
                 if (GUILayout.Button("Rotate")) {
-                    t.StopAction();
-                    t.StartCoroutine(t.CoRotateAction(10f));
+                    t.StartRotateAction();
                 }
                 if (GUILayout.Button("Stop All")) {
-                    t.StopAction();
+                    t.StopAllAction();
                 }
             }
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GPUParticleSystem.GPUActions {
 
-    public class LinearAction : MonoBehaviour {
+    public class LinearAction : MonoBehaviour, IAction {
 
         public Links links = new();
         public Tuner tuner = new();
@@ -23,14 +23,17 @@ namespace GPUParticleSystem.GPUActions {
             k_Linear = cs.FindKernel(K_Linear);
             cs.GetKernelThreadGroupSizes(k_Linear, out g_Linear, out _, out _);
         }
-        void Update() {
-            if (particles == null) return;
+        #endregion
+
+        #region interface
+        public virtual void Next(float dt) {
+            if (!isActiveAndEnabled || particles == null) return;
 
             var forward = links.forward != null ? links.forward.forward : transform.forward;
             var gb_particle = particles.Particles;
 
             cs.SetVector(P_LinearDirection, forward * tuner.speed);
-            cs.SetFloat(GPUParticles.P_DeltaTime, Time.deltaTime);
+            cs.SetFloat(GPUParticles.P_DeltaTime, dt);
             cs.SetBuffer(k_Linear, GPUParticles.P_Particles, gb_particle);
 
             var dispatchCount = GPUParticles.DispatcCount(gb_particle.count, g_Linear);

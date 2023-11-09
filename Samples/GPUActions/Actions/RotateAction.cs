@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GPUParticleSystem.GPUActions {
 
-    public class RotateAction : MonoBehaviour {
+    public class RotateAction : MonoBehaviour, IAction {
 
         public Links links = new();
         public Tuner tuner = new();
@@ -24,15 +24,18 @@ namespace GPUParticleSystem.GPUActions {
             k_Rotate = cs.FindKernel(K_Linear);
             cs.GetKernelThreadGroupSizes(k_Rotate, out g_Rotate, out _, out _);
         }
-        void Update() {
-            if (particles == null) return;
+        #endregion
+
+        #region interface
+        public virtual void Next(float dt) {
+            if (!isActiveAndEnabled || particles == null) return;
 
             var axis = links.axis != null ? links.axis : transform;
             var gb_particle = particles.Particles;
 
             float3 rotation_center = axis.position;
             float3 rotation_axis = axis.forward;
-            var rotation_angle = tuner.speed * Time.deltaTime * TWO_PI;
+            var rotation_angle = tuner.speed * dt * TWO_PI;
             var rotation_matrix = float4x4.AxisAngle(rotation_axis, rotation_angle);
             rotation_matrix = math.mul(
                 float4x4.Translate(rotation_center),
@@ -41,7 +44,7 @@ namespace GPUParticleSystem.GPUActions {
                 float4x4.Translate(-rotation_center));
 
             cs.SetMatrix(P_RotationMatrix, rotation_matrix);
-            cs.SetFloat(GPUParticles.P_DeltaTime, Time.deltaTime);
+            cs.SetFloat(GPUParticles.P_DeltaTime, dt);
             cs.SetBuffer(k_Rotate, GPUParticles.P_Particles, gb_particle);
 
             var dispatchCount = GPUParticles.DispatcCount(gb_particle.count, g_Rotate);

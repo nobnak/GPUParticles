@@ -1,7 +1,7 @@
 #pragma kernel Rotate
 
 
-#include_with_pragmas "../../../Resources/UpdateCommon.hlsl"
+#include_with_pragmas "../../../ShaderLibrary/UpdateCommon.hlsl"
 
 float4x4 _RotationMatrix;
 

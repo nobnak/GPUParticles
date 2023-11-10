@@ -5,7 +5,7 @@
 #pragma kernel Index
 
 
-#include_with_pragmas "UpdateCommon.hlsl"
+#include_with_pragmas "../ShaderLibrary/UpdateCommon.hlsl"
 
 
 [numthreads(64, 1, 1)]

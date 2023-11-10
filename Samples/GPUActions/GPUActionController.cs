@@ -67,8 +67,10 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 gpart.Add(p);
             }
 
+            var particles = gpart.Particles;
             gpart.Update(Time.deltaTime);
-            matProps.SetBuffer(P_Particles, gpart.Particles);
+            matProps.SetInt(P_ParticlesCount, particles.count);
+            matProps.SetBuffer(P_Particles, particles);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
         }
         void OnDisable() {
@@ -156,6 +158,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         public static readonly float3 Emitter_Min = -0.5f * new float3(1, 1, 1);
         public static readonly float3 Emitter_Max = 0.5f * new float3(1, 1, 1);
 
+        public static readonly int P_ParticlesCount = Shader.PropertyToID("_ParticlesCount");
         public static readonly int P_Particles = Shader.PropertyToID("_Particles");
 
         [System.Serializable]

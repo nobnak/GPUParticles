@@ -3,6 +3,8 @@
 
 
 #include "../Runtime/ShaderLibrary/Particle.cs.hlsl"
+
+uint _ParticlesCount;
 StructuredBuffer<Particle> _Particles;
 
 

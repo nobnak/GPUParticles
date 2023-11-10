@@ -60,8 +60,12 @@ Shader "Unlit/Particle-Unlit" {
 
             [maxvertexcount(4)]
             void geom (point appdata v[1], inout TriangleStream<v2f> stream) {
-                
-                Particle p = _Particles[v[0].instanceID];
+                uint instanceID = v[0].instanceID;
+                if (instanceID >= _ParticlesCount) {
+                    return;
+                }
+
+                Particle p = _Particles[instanceID];
                 if (p.activity <= 0) {
 					return;
 				}

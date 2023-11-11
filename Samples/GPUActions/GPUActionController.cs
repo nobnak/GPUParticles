@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
+using GPUParticleSystem.Samples.GPUActions.Utils;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -67,10 +68,10 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 gpart.Add(p);
             }
 
-            var particles = gpart.Particles;
             gpart.Update(Time.deltaTime);
-            matProps.SetInt(P_ParticlesCount, particles.count);
-            matProps.SetBuffer(P_Particles, particles);
+
+            var particles = gpart.Particles;
+            matProps.SetParticles(particles);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
         }
         void OnDisable() {

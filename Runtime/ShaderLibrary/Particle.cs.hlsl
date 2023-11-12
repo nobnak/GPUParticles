@@ -8,40 +8,15 @@
 // PackingRules = Exact
 struct Particle
 {
+    float4 color; // x: x y: y z: z w: w 
     float3 position; // x: x y: y z: z 
-    float3 velocity; // x: x y: y z: z 
     float lifetime;
+    float3 velocity; // x: x y: y z: z 
     float duration;
+    float3 uvw; // x: x y: y z: z 
     float size;
     int activity;
 };
 
-//
-// Accessors for GPUParticleSystem.Particle
-//
-float3 GetPosition(Particle value)
-{
-    return value.position;
-}
-float3 GetVelocity(Particle value)
-{
-    return value.velocity;
-}
-float GetLifetime(Particle value)
-{
-    return value.lifetime;
-}
-float GetDuration(Particle value)
-{
-    return value.duration;
-}
-float GetSize(Particle value)
-{
-    return value.size;
-}
-int GetActivity(Particle value)
-{
-    return value.activity;
-}
 
 #endif

@@ -201,9 +201,9 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 734c97e16adb35e46a10d67cbdbef7b9, type: 2}
     emitter: {fileID: 1628756244}
     actions: {fileID: 1380345485}
-  presets:
+  tuner:
     duration: 60
-    init_speed: 1
+    init_uv_move: 0.1
 --- !u!1 &441056531
 GameObject:
   m_ObjectHideFlags: 0

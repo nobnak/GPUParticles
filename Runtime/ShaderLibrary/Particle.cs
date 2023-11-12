@@ -6,13 +6,19 @@ using UnityEngine.Rendering;
 
 namespace GPUParticleSystem {
 
-    [GenerateHLSL]
+    [GenerateHLSL(needAccessors = false)]
     public struct Particle {
+        public float4 color;
+
         public float3 position;
-        public float3 velocity;
         public float lifetime;
+
+        public float3 velocity;
         public float duration;
+
+        public float3 uvw;
         public float size;
+
         public int activity;
     }
 }

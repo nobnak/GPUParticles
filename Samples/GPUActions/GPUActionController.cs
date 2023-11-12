@@ -16,7 +16,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
 
         public Events events = new();
         public Links links = new();
-        public Presets presets = new();
+        public Tuner tuner = new();
 
         protected Random rand;
         protected RenderParams renderParams;
@@ -57,13 +57,15 @@ namespace GPUParticleSystem.Samples.GPUActions {
             if (emitter != null && Input.GetMouseButton(0)) {
                 var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
                 var dir = math.mul(rand.NextQuaternionRotation(), new float3(0, 0, 1));
+                var time = Time.timeSinceLevelLoad * tuner.init_uv_move;
                 var p = new Particle() {
                     activity = 1,
                     position = pos,
-                    velocity = presets.init_speed * dir,
-                    duration = presets.duration,
-                    lifetime = presets.duration,
+                    duration = tuner.duration,
+                    lifetime = tuner.duration,
                     size = rand.NextFloat(0.8f, 1.2f),
+                    color = new float4(1,1,1,1),
+                    uvw = new float3(time, 0.5f,0.5f),
                 };
                 gpart.Add(p);
             }
@@ -177,9 +179,9 @@ namespace GPUParticleSystem.Samples.GPUActions {
             public Transform actions;
         }
         [System.Serializable]
-        public class Presets {
+        public class Tuner {
             public float duration = 60f;
-            public float init_speed = 1f;
+            public float init_uv_move = 0.2f;
         }
         #endregion
 

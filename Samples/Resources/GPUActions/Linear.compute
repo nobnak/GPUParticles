@@ -1,7 +1,7 @@
 #pragma kernel Linear
 
 
-#include_with_pragmas "../../../ShaderLibrary//UpdateCommon.hlsl"
+#include_with_pragmas "../../../ShaderLibrary/UpdateCommon.hlsl"
 
 float3 _LinearDirection;
 

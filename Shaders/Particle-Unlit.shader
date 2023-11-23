@@ -31,7 +31,7 @@ Shader "Unlit/Particle-Unlit" {
                 float4 color : COLOR;
             };
 
-            #include_with_pragmas "../../ShaderLibrary/RenderCommon.hlsl"
+            #include_with_pragmas "../ShaderLibrary/RenderCommon.hlsl"
             #define FADE 0.1
 
             sampler2D _MainTex;

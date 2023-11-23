@@ -1,11 +1,12 @@
-using GPUParticleSystem.GPUActions;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
-using GPUParticleSystem.Samples.GPUActions.Utils;
 using UnityEngine.InputSystem;
+using GPUParticleSystem.Data;
+using GPUParticleSystem.Actions;
+using GPUParticleSystem.Util;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -161,9 +162,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
         #region declarations
         public static readonly float3 Emitter_Min = -0.5f * new float3(1, 1, 1);
         public static readonly float3 Emitter_Max = 0.5f * new float3(1, 1, 1);
-
-        public static readonly int P_ParticlesCount = Shader.PropertyToID("_ParticlesCount");
-        public static readonly int P_Particles = Shader.PropertyToID("_Particles");
 
         [System.Serializable]
         public class Events {

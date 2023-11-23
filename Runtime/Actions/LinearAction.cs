@@ -1,8 +1,9 @@
+using GPUParticleSystem.Constants;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GPUParticleSystem.GPUActions {
+namespace GPUParticleSystem.Actions {
 
     public class LinearAction : MonoBehaviour, IAction {
 

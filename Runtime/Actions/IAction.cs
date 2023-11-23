@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GPUParticleSystem.GPUActions {
+namespace GPUParticleSystem.Actions {
 
     public interface IAction {
 

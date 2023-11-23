@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Unity.Mathematics",
-        "Unity.RenderPipelines.Core.Runtime"
+        "Unity.RenderPipelines.Core.Runtime",
+        "GPUParticleData"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

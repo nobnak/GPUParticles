@@ -1,9 +1,10 @@
+using GPUParticleSystem.Constants;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace GPUParticleSystem.GPUActions {
+namespace GPUParticleSystem.Actions {
 
     public class RotateAction : MonoBehaviour, IAction {
 

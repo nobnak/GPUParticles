@@ -5,7 +5,8 @@
         "Unity.Mathematics",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.InputSystem",
-        "GPUParticles"
+        "GPUParticles",
+        "GPUParticleData"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

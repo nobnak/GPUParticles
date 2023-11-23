@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace GPUParticleSystem.GPUActions {
+namespace GPUParticleSystem.Constants {
 
     public enum Axis {
         X = 0,

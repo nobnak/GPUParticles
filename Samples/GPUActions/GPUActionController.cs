@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 using GPUParticleSystem.Samples.GPUActions.Utils;
+using UnityEngine.InputSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -54,9 +55,9 @@ namespace GPUParticleSystem.Samples.GPUActions {
         }
         void Update() {
             var emitter = links.emitter;
-            if (emitter != null && Input.GetMouseButton(0)) {
+            var mouse = Mouse.current;
+            if (emitter != null && mouse.leftButton.isPressed) {
                 var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
-                var dir = math.mul(rand.NextQuaternionRotation(), new float3(0, 0, 1));
                 var time = Time.timeSinceLevelLoad * tuner.init_uv_move;
                 var p = new Particle() {
                     activity = 1,

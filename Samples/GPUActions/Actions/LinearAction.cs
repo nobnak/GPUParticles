@@ -29,7 +29,8 @@ namespace GPUParticleSystem.GPUActions {
         public virtual void Next(float dt) {
             if (!isActiveAndEnabled || particles == null) return;
 
-            var forward = links.forward != null ? links.forward.forward : transform.forward;
+            var forward = (links.forward != null ? links.forward : transform)
+                .TransformDirection(tuner.forwardAxis.Direction());
             var gb_particle = particles.Particles;
 
             cs.SetVector(P_LinearDirection, forward * tuner.speed);
@@ -54,6 +55,7 @@ namespace GPUParticleSystem.GPUActions {
         }
         [System.Serializable]
         public class Tuner {
+            public Axis forwardAxis = Axis.Z;
             public float speed = 1f;
         }
         #endregion

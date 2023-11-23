@@ -34,7 +34,7 @@ namespace GPUParticleSystem.GPUActions {
             var gb_particle = particles.Particles;
 
             float3 rotation_center = axis.position;
-            float3 rotation_axis = axis.forward;
+            float3 rotation_axis = axis.TransformDirection(tuner.rotationAxis.Direction());
             var rotation_angle = tuner.speed * dt * TWO_PI;
             var rotation_matrix = float4x4.AxisAngle(rotation_axis, rotation_angle);
             rotation_matrix = math.mul(
@@ -67,6 +67,7 @@ namespace GPUParticleSystem.GPUActions {
         }
         [System.Serializable]
         public class Tuner {
+            public Axis rotationAxis = Axis.Y;
             public float speed = 1f;
         }
         #endregion

@@ -4,6 +4,7 @@
     "references": [
         "Unity.Mathematics",
         "Unity.RenderPipelines.Core.Runtime",
+        "Unity.InputSystem",
         "GPUParticles"
     ],
     "includePlatforms": [],

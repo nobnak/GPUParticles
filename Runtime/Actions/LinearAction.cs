@@ -1,3 +1,4 @@
+using Gist2.Extensions.ComponentExt;
 using GPUParticleSystem.Constants;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,14 +8,20 @@ namespace GPUParticleSystem.Actions {
 
     public class LinearAction : MonoBehaviour, IAction {
 
-        public Links links = new();
-        public Tuner tuner = new();
+        [SerializeField]
+        protected Links links = new();
+        [SerializeField]
+        protected Tuner tuner = new();
 
         protected ComputeShader cs;
         protected int k_Linear;
         protected uint g_Linear;
 
         #region properties
+        public Tuner CurrTuner {
+            get => tuner.DeepCopy();
+            set => tuner = value.DeepCopy();
+        }
         public GPUParticles particles { get; set; }
         #endregion
 

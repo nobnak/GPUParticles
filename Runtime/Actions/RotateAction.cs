@@ -1,3 +1,4 @@
+using Gist2.Extensions.ComponentExt;
 using GPUParticleSystem.Constants;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,14 +9,20 @@ namespace GPUParticleSystem.Actions {
 
     public class RotateAction : MonoBehaviour, IAction {
 
-        public Links links = new();
-        public Tuner tuner = new();
+        [SerializeField]
+        protected Links links = new();
+        [SerializeField]
+        protected Tuner tuner = new();
 
         protected ComputeShader cs;
         protected int k_Rotate;
         protected uint g_Rotate;
 
         #region properties
+        public Tuner CurrTuner {
+            get => tuner.DeepCopy();
+            set => tuner = value.DeepCopy();
+        }
         public GPUParticles particles { get; set; }
         #endregion
 

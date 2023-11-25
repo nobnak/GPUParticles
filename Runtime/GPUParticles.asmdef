@@ -4,7 +4,8 @@
     "references": [
         "Unity.Mathematics",
         "Unity.RenderPipelines.Core.Runtime",
-        "GPUParticleData"
+        "GPUParticleData",
+        "Gist2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

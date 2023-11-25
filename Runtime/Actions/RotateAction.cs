@@ -23,6 +23,10 @@ namespace GPUParticleSystem.Actions {
             get => tuner.DeepCopy();
             set => tuner = value.DeepCopy();
         }
+        public Links CurrLinks {
+            get => links;
+            set => links = value;
+        }
         public GPUParticles particles { get; set; }
         #endregion
 

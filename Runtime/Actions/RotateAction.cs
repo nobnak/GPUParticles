@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GPUParticleSystem.Actions {
 
-    public class RotateAction : MonoBehaviour, IAction {
+    public class RotateAction : MonoBehaviour, IAction<RotateAction.Settings> {
 
         protected ComputeShader cs;
         protected int k_Rotate;
@@ -22,10 +22,10 @@ namespace GPUParticleSystem.Actions {
         #endregion
 
         #region interface
-        public virtual void Next(float dt, Settings settings) {
-            if (!isActiveAndEnabled || settings.particles == null) return;
+        public virtual void Next(GPUParticles particle, float dt, Settings settings) {
+            if (!isActiveAndEnabled || particle == null) return;
 
-            var gb_particle = settings.particles.Particles;
+            var gb_particle = particle.Particles;
 
             var rotation_axis = settings.axis;
             var rotation_center = settings.center;
@@ -61,8 +61,7 @@ namespace GPUParticleSystem.Actions {
 
         public static readonly float TWO_PI = 2f * math.PI;
 
-        public class Settings {
-            public GPUParticles particles;
+        public class Settings : IAction<Settings>.ISettings {
             public float3 center;
             public float3 axis;
             public float speed;

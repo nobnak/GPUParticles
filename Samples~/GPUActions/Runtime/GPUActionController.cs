@@ -25,8 +25,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
         protected MaterialPropertyBlock matProps;
         protected GPUParticles gpart;
 
-        protected LinearAction.Settings linearSettings = new();
-        protected RotateAction.Settings rotateSettings = new();
         protected Coroutine coLinearAction, coRotateAction;
 
         #region unity
@@ -60,22 +58,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
                     color = new float4(1,1,1,1),
                 };
                 gpart.Add(p);
-            }
-
-            var linear = links.linear;
-            var linear_dir = links.linearDir;
-            if (linear != null && linear_dir != null) {
-                linearSettings.particles = gpart;
-                linearSettings.forwardDir = linear_dir.forward;
-                linearSettings.speed = tuner.linearSpeed;
-            }
-            var rotate = links.rotate;
-            var rotate_axis = links.rotationAxis;
-            if (rotate != null && rotate_axis != null) {
-                rotateSettings.particles = gpart;
-                rotateSettings.speed = tuner.rotationSpeed;
-                rotateSettings.axis = rotate_axis.up;
-                rotateSettings.center = rotate_axis.position;
             }
 
             gpart.Update(Time.deltaTime);
@@ -124,9 +106,17 @@ namespace GPUParticleSystem.Samples.GPUActions {
         IEnumerator CoLinearAction(float duration = 360f) {
             yield return null;
 
+            var s = new LinearAction.Settings();
             while (duration > 0f) {
                 var dt = Time.deltaTime;
-                links.linear.Next(dt, linearSettings);
+
+                var linear = links.linear;
+                var linear_dir = links.linearDir;
+                if (linear != null && linear_dir != null) {
+                    s.speed = tuner.linearSpeed;
+                    s.forwardDir = linear_dir.forward;
+                    linear.Next(gpart, dt, s);
+                }
                 duration -= dt;
                 yield return null;
             }
@@ -134,9 +124,18 @@ namespace GPUParticleSystem.Samples.GPUActions {
         IEnumerator CoRotateAction(float duration = 360f) {
             yield return null;
 
+            var s = new RotateAction.Settings();
             while (duration > 0f) {
                 var dt = Time.deltaTime;
-                links.rotate.Next(dt, rotateSettings);
+
+                var rotate = links.rotate;
+                var rotate_axis = links.rotationAxis;
+                if (rotate != null && rotate_axis != null) {
+                    s.speed = tuner.rotationSpeed;
+                    s.axis = rotate_axis.up;
+                    s.center = rotate_axis.position;
+                    rotate.Next(gpart, dt, s);
+                }
                 duration -= dt;
                 yield return null;
             }

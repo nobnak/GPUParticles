@@ -207,8 +207,9 @@ MonoBehaviour:
     linearDir: {fileID: 1708642185}
     rotationAxis: {fileID: 1977901922}
   tuner:
-    duration: 60
-    init_uv_move: 0.1
+    duration: 10
+    linearSpeed: 1
+    rotationSpeed: 0.1
 --- !u!1 &441056531
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,12 +782,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee3b2ca558f6124682dcc3bb4ced088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tuner:
-    forwardDir:
-      x: 1
-      y: 0
-      z: 0
-    speed: 1
 --- !u!1 &1825952271
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,16 +826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d61008985b17e48bab19b41322485c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tuner:
-    rotationCenter:
-      x: 0
-      y: 0
-      z: 0
-    rotationAxis:
-      x: 0
-      y: 1
-      z: 0
-    speed: 0.1
 --- !u!1 &1977901921
 GameObject:
   m_ObjectHideFlags: 0

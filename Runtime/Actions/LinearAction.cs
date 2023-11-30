@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GPUParticleSystem.Actions {
 
-    public class LinearAction : MonoBehaviour, IAction {
+    public class LinearAction : MonoBehaviour, IAction<LinearAction.Settings> {
 
         protected ComputeShader cs;
         protected int k_Linear;
@@ -22,10 +22,10 @@ namespace GPUParticleSystem.Actions {
         #endregion
 
         #region interface
-        public virtual void Next(float dt, Settings s) {
-            if (!isActiveAndEnabled || s.particles == null) return;
+        public virtual void Next(GPUParticles particle, float dt, Settings s) {
+            if (!isActiveAndEnabled || particle == null) return;
 
-            var gb_particle = s.particles.Particles;
+            var gb_particle = particle.Particles;
 
             var forward = s.forwardDir;
 #if UNITY_EDITOR
@@ -37,10 +37,10 @@ namespace GPUParticleSystem.Actions {
 
             cs.SetVector(P_LinearDirection, new float4(forward * s.speed, 0f));
             cs.SetFloat(GPUParticles.P_DeltaTime, dt);
-            cs.SetBuffer(k_Linear, GPUParticles.P_Particles, gb_particle);
+            cs.SetBuffer(k_Linear, GPUParticles.P_Particles, (GraphicsBuffer)gb_particle);
 
-            var dispatchCount = GPUParticles.DispatcCount(gb_particle.count, g_Linear);
-            cs.SetInts(GPUParticles.P_ThreadCount, gb_particle.count);
+            var dispatchCount = GPUParticles.DispatcCount((int)gb_particle.count, g_Linear);
+            cs.SetInts(GPUParticles.P_ThreadCount, (int)gb_particle.count);
             cs.Dispatch(k_Linear, dispatchCount, 1, 1);
         }
         #endregion
@@ -51,8 +51,7 @@ namespace GPUParticleSystem.Actions {
 
         public static readonly int P_LinearDirection = Shader.PropertyToID("_LinearDirection");
 
-        public class Settings {
-            public GPUParticles particles;
+        public class Settings : IAction<Settings>.ISettings {
             public float3 forwardDir;
             public float speed;
         }

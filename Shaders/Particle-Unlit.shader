@@ -32,7 +32,7 @@ Shader "Unlit/Particle-Unlit" {
             };
 
             #include_with_pragmas "../ShaderLibrary/RenderCommon.hlsl"
-            #define FADE 0.1
+            #define FADE 0.5
 
             sampler2D _MainTex;
             sampler2D _ColorTex;

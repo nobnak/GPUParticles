@@ -2,14 +2,13 @@ using Gist2.Extensions.ComponentExt;
 using GPUParticleSystem.Constants;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace GPUParticleSystem.Actions {
 
     public class LinearAction : MonoBehaviour, IAction {
 
-        [SerializeField]
-        protected Links links = new();
         [SerializeField]
         protected Tuner tuner = new();
 
@@ -20,11 +19,11 @@ namespace GPUParticleSystem.Actions {
         #region properties
         public Tuner CurrTuner {
             get => tuner.DeepCopy();
-            set => tuner = value.DeepCopy();
-        }
-        public Links CurrLinks {
-            get => links;
-            set => links = value;
+            set {
+                if (!tuner.EqualsAsJson(value)) {
+                    tuner = value.DeepCopy();
+                }
+            }
         }
         public GPUParticles particles { get; set; }
         #endregion
@@ -41,11 +40,17 @@ namespace GPUParticleSystem.Actions {
         public virtual void Next(float dt) {
             if (!isActiveAndEnabled || particles == null) return;
 
-            var forward = (links.forward != null ? links.forward : transform)
-                .TransformDirection(tuner.forwardAxis.Direction());
+            var forward = tuner.forwardDir;
             var gb_particle = particles.Particles;
 
-            cs.SetVector(P_LinearDirection, forward * tuner.speed);
+#if UNITY_EDITOR
+            var forward_lensq = math.lengthsq(forward);
+            if (forward_lensq < 0.99f || forward_lensq > 1.01f) {
+                Debug.LogWarning($"LinearAction: forward direction is not normalized: {forward}");
+            }
+#endif
+
+            cs.SetVector(P_LinearDirection, new float4(forward * tuner.speed, 0f));
             cs.SetFloat(GPUParticles.P_DeltaTime, dt);
             cs.SetBuffer(k_Linear, GPUParticles.P_Particles, gb_particle);
 
@@ -67,7 +72,7 @@ namespace GPUParticleSystem.Actions {
         }
         [System.Serializable]
         public class Tuner {
-            public Axis forwardAxis = Axis.Z;
+            public float3 forwardDir = float3.zero;
             public float speed = 1f;
         }
         #endregion

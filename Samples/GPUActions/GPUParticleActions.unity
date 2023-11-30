@@ -155,6 +155,8 @@ Transform:
   m_Children:
   - {fileID: 1380345485}
   - {fileID: 1628756244}
+  - {fileID: 1708642185}
+  - {fileID: 1977901922}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &259855883
@@ -200,7 +202,10 @@ MonoBehaviour:
   links:
     material: {fileID: 2100000, guid: 734c97e16adb35e46a10d67cbdbef7b9, type: 2}
     emitter: {fileID: 1628756244}
-    actions: {fileID: 1380345485}
+    linear: {fileID: 1746208543}
+    rotate: {fileID: 1825952273}
+    linearDir: {fileID: 1708642185}
+    rotationAxis: {fileID: 1977901922}
   tuner:
     duration: 60
     init_uv_move: 0.1
@@ -537,8 +542,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1746208542}
   - {fileID: 1825952272}
+  - {fileID: 1746208542}
   m_Father: {fileID: 259855882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382055628
@@ -709,7 +714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1708642185}
   m_Layer: 0
-  m_Name: Forward
+  m_Name: Forward (Linear)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -724,13 +729,13 @@ Transform:
   m_GameObject: {fileID: 1708642184}
   serializedVersion: 2
   m_LocalRotation: {x: -0.2779024, y: 0.62276596, z: 0.055101506, w: 0.72931254}
-  m_LocalPosition: {x: 1.35, y: 0, z: 0}
+  m_LocalPosition: {x: 1.35, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1000056536}
   - {fileID: 1382055629}
-  m_Father: {fileID: 1746208542}
+  m_Father: {fileID: 259855882}
   m_LocalEulerAnglesHint: {x: -28.293, y: 85.449, z: -17.567}
 --- !u!1 &1746208541
 GameObject:
@@ -757,12 +762,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746208541}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1708642185}
+  m_Children: []
   m_Father: {fileID: 1380345485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1746208543
@@ -777,10 +781,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee3b2ca558f6124682dcc3bb4ced088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  links:
-    forward: {fileID: 1708642185}
   tuner:
-    forwardAxis: 2
+    forwardDir:
+      x: 1
+      y: 0
+      z: 0
     speed: 1
 --- !u!1 &1825952271
 GameObject:
@@ -811,8 +816,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1977901922}
+  m_Children: []
   m_Father: {fileID: 1380345485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1825952273
@@ -827,10 +831,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d61008985b17e48bab19b41322485c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  links:
-    axis: {fileID: 1977901922}
   tuner:
-    rotationAxis: 1
+    rotationCenter:
+      x: 0
+      y: 0
+      z: 0
+    rotationAxis:
+      x: 0
+      y: 1
+      z: 0
     speed: 0.1
 --- !u!1 &1977901921
 GameObject:
@@ -842,7 +851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1977901922}
   m_Layer: 0
-  m_Name: Axis
+  m_Name: Axis (Rotation)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,13 +865,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1977901921}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 441056532}
-  m_Father: {fileID: 1825952272}
+  m_Father: {fileID: 259855882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2096473991
 GameObject:

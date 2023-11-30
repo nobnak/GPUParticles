@@ -10,8 +10,6 @@ namespace GPUParticleSystem.Actions {
     public class RotateAction : MonoBehaviour, IAction {
 
         [SerializeField]
-        protected Links links = new();
-        [SerializeField]
         protected Tuner tuner = new();
 
         protected ComputeShader cs;
@@ -22,10 +20,6 @@ namespace GPUParticleSystem.Actions {
         public Tuner CurrTuner {
             get => tuner.DeepCopy();
             set => tuner = value.DeepCopy();
-        }
-        public Links CurrLinks {
-            get => links;
-            set => links = value;
         }
         public GPUParticles particles { get; set; }
         #endregion
@@ -42,11 +36,16 @@ namespace GPUParticleSystem.Actions {
         public virtual void Next(float dt) {
             if (!isActiveAndEnabled || particles == null) return;
 
-            var axis = links.axis != null ? links.axis : transform;
             var gb_particle = particles.Particles;
 
-            float3 rotation_center = axis.position;
-            float3 rotation_axis = axis.TransformDirection(tuner.rotationAxis.Direction());
+            var rotation_axis = tuner.rotationAxis;
+            var rotation_center = tuner.rotationCenter;
+#if UNITY_EDITOR
+            var lensq_axis = math.lengthsq(rotation_axis);
+            if (lensq_axis < 0.99f || 1.01f < lensq_axis)
+                Debug.LogWarning($"Rotation axis is not normalized. {rotation_axis}");
+#endif
+
             var rotation_angle = tuner.speed * dt * TWO_PI;
             var rotation_matrix = float4x4.AxisAngle(rotation_axis, rotation_angle);
             rotation_matrix = math.mul(
@@ -74,12 +73,9 @@ namespace GPUParticleSystem.Actions {
         public static readonly float TWO_PI = 2f * math.PI;
 
         [System.Serializable]
-        public class  Links {
-            public Transform axis;
-        }
-        [System.Serializable]
         public class Tuner {
-            public Axis rotationAxis = Axis.Y;
+            public float3 rotationCenter = float3.zero;
+            public float3 rotationAxis = new float3(0f, 1f, 0f);
             public float speed = 1f;
         }
         #endregion

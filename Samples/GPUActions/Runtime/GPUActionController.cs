@@ -25,7 +25,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         protected MaterialPropertyBlock matProps;
         protected GPUParticles gpart;
 
-        protected Dictionary<string, IAction> actions = new();
+        protected Dictionary<string, IAction> actionDic = new();
         protected Coroutine coLinearAction, coRotateAction;
 
         #region unity
@@ -40,36 +40,47 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 matProps = matProps,
             };
 
-            actions.Clear();
-            if (links.actions != null ) {
-                foreach (var action in links.actions.GetComponentsInChildren<IAction>()) {
-                    if (action == null) continue;
-                    var name = action.GetType().Name;
-                    actions[name] = action;
-                    Debug.Log($"Add action: {name}");
-                }
+            actionDic.Clear();
+            if (links.linear != null) {
+                var linear = links.linear;
+                actionDic.Add(linear.GetType().Name, linear);
+            }
+            if (links.rotate != null) {
+                var rotate = links.rotate;
+                actionDic.Add(rotate.GetType().Name, rotate);
             }
 
             events.onGpuParticleSystemCreated?.Invoke(gpart);
 
+#if UNITY_EDITOR
             StartCoroutine(PeriodicReport());
+#endif
         }
         void Update() {
             var emitter = links.emitter;
             var mouse = Mouse.current;
             if (emitter != null && mouse.leftButton.isPressed) {
                 var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
-                var time = Time.timeSinceLevelLoad * tuner.init_uv_move;
                 var p = new Particle() {
                     activity = 1,
                     position = pos,
-                    duration = tuner.duration,
-                    lifetime = tuner.duration,
-                    size = rand.NextFloat(0.8f, 1.2f),
+                    life = tuner.duration,
+                    lifespan = tuner.duration,
                     color = new float4(1,1,1,1),
-                    uvw = new float3(time, 0.5f,0.5f),
                 };
                 gpart.Add(p);
+            }
+
+            var linear = links.linear;
+            var linear_dir = links.linearDir;
+            if (linear != null && linear_dir != null) {
+                linear.CurrTuner.forwardDir = linear_dir.forward;
+            }
+            var rotate = links.rotate;
+            var rotate_axis = links.rotationAxis;
+            if (rotate != null && rotate_axis != null) {
+                rotate.CurrTuner.rotationAxis = rotate_axis.up;
+                rotate.CurrTuner.rotationCenter = rotate_axis.position;
             }
 
             gpart.Update(Time.deltaTime);
@@ -117,7 +128,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         #region actions
         IEnumerator CoGenericAction<T>(float duration = 360f) where T : IAction {
             var typeName = typeof(T).Name;
-            if (!actions.TryGetValue(typeName, out var action)) {
+            if (!actionDic.TryGetValue(typeName, out var action)) {
                 Debug.LogError($"Action {typeName} not found");
                 yield break;
             }
@@ -175,7 +186,12 @@ namespace GPUParticleSystem.Samples.GPUActions {
         public class Links {
             public Material material;
             public Transform emitter;
-            public Transform actions;
+            
+            public LinearAction linear;
+            public RotateAction rotate;
+
+            public Transform linearDir;
+            public Transform rotationAxis;
         }
         [System.Serializable]
         public class Tuner {

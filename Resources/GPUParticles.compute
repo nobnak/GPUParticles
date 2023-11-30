@@ -37,13 +37,13 @@ void Update(uint3 id : SV_DispatchThreadID) {
 	switch (_OperationMode) {
 		default: {
 			// Update the particle
-			particle.duration -= _DeltaTime;
+			particle.life -= _DeltaTime;
 			break;
 		}
 
 	}
 
-	if (particle.duration <= 0) {
+	if (particle.life <= 0) {
 		// Add the index to the pool
 		_IndexPoolA.Append(id.x);
 		particle.activity = 0;

@@ -73,14 +73,13 @@ Shader "Unlit/Particle-Unlit" {
 				}
 
                 float3 center_wc = mul(unity_ObjectToWorld, float4(p.position, 1)).xyz;
-                float size = p.size * _Size;
+                float size = _Size;
 
-                float tot = p.lifetime;
-                float rem = p.duration;
+                float tot = p.lifespan;
+                float rem = p.life;
                 float4 color = smoothstep(0, FADE, rem) 
                     * smoothstep(tot, tot - FADE, rem)
-                    * p.color
-                    * tex2Dlod(_ColorTex, float4(p.uvw, 0));
+                    * p.color;
 
                 for (int i = 0; i < 4; i++) {
                     float3 quadOffset_wc = mul(unity_CameraToWorld, quad[i]).xyz;

@@ -9,30 +9,9 @@ namespace GPUParticleSystem.Actions {
 
     public class LinearAction : MonoBehaviour, IAction {
 
-        [SerializeField]
-        protected Tuner tuner = new();
-        [SerializeField]
-        protected Presets presets = new();
-
         protected ComputeShader cs;
         protected int k_Linear;
         protected uint g_Linear;
-
-        #region properties
-        public Tuner CurrTuner {
-            get => tuner.DeepCopy();
-            set {
-                if (!tuner.EqualsAsJson(value)) {
-                    tuner = value.DeepCopy();
-                }
-            }
-        }
-        public Presets CurrPresets {
-            get => presets;
-            set => presets = value;
-        }
-        public GPUParticles particles { get; set; }
-        #endregion
 
         #region unity
         void OnEnable() {
@@ -43,12 +22,12 @@ namespace GPUParticleSystem.Actions {
         #endregion
 
         #region interface
-        public virtual void Next(float dt) {
-            if (!isActiveAndEnabled || particles == null) return;
+        public virtual void Next(float dt, Settings s) {
+            if (!isActiveAndEnabled || s.particles == null) return;
 
-            var gb_particle = particles.Particles;
+            var gb_particle = s.particles.Particles;
 
-            var forward = presets.forwardDir;
+            var forward = s.forwardDir;
 #if UNITY_EDITOR
             var forward_lensq = math.lengthsq(forward);
             if (forward_lensq < 0.99f || forward_lensq > 1.01f) {
@@ -56,7 +35,7 @@ namespace GPUParticleSystem.Actions {
             }
 #endif
 
-            cs.SetVector(P_LinearDirection, new float4(forward * tuner.speed, 0f));
+            cs.SetVector(P_LinearDirection, new float4(forward * s.speed, 0f));
             cs.SetFloat(GPUParticles.P_DeltaTime, dt);
             cs.SetBuffer(k_Linear, GPUParticles.P_Particles, gb_particle);
 
@@ -72,13 +51,10 @@ namespace GPUParticleSystem.Actions {
 
         public static readonly int P_LinearDirection = Shader.PropertyToID("_LinearDirection");
 
-        [System.Serializable]
-        public class Presets {
-            public float3 forwardDir = float3.zero;
-        }
-        [System.Serializable]
-        public class Tuner {
-            public float speed = 1f;
+        public class Settings {
+            public GPUParticles particles;
+            public float3 forwardDir;
+            public float speed;
         }
         #endregion
     }

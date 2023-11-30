@@ -9,26 +9,9 @@ namespace GPUParticleSystem.Actions {
 
     public class RotateAction : MonoBehaviour, IAction {
 
-        [SerializeField]
-        protected Tuner tuner = new();
-        [SerializeField]
-        protected Presets presets = new();
-
         protected ComputeShader cs;
         protected int k_Rotate;
         protected uint g_Rotate;
-
-        #region properties
-        public Tuner CurrTuner {
-            get => tuner.DeepCopy();
-            set => tuner = value.DeepCopy();
-        }
-        public Presets CurrPresets {
-            get => presets;
-            set => presets = value;
-        }
-        public GPUParticles particles { get; set; }
-        #endregion
 
         #region unity
         void OnEnable() {
@@ -39,20 +22,20 @@ namespace GPUParticleSystem.Actions {
         #endregion
 
         #region interface
-        public virtual void Next(float dt) {
-            if (!isActiveAndEnabled || particles == null) return;
+        public virtual void Next(float dt, Settings settings) {
+            if (!isActiveAndEnabled || settings.particles == null) return;
 
-            var gb_particle = particles.Particles;
+            var gb_particle = settings.particles.Particles;
 
-            var rotation_axis = presets.rotationAxis;
-            var rotation_center = presets.rotationCenter;
+            var rotation_axis = settings.axis;
+            var rotation_center = settings.center;
 #if UNITY_EDITOR
             var lensq_axis = math.lengthsq(rotation_axis);
             if (lensq_axis < 0.99f || 1.01f < lensq_axis)
                 Debug.LogWarning($"Rotation axis is not normalized. {rotation_axis}");
 #endif
 
-            var rotation_angle = tuner.speed * dt * TWO_PI;
+            var rotation_angle = settings.speed * dt * TWO_PI;
             var rotation_matrix = float4x4.AxisAngle(rotation_axis, rotation_angle);
             rotation_matrix = math.mul(
                 float4x4.Translate(rotation_center),
@@ -78,14 +61,11 @@ namespace GPUParticleSystem.Actions {
 
         public static readonly float TWO_PI = 2f * math.PI;
 
-        [System.Serializable]
-        public class Presets {
-            public float3 rotationCenter = float3.zero;
-            public float3 rotationAxis = new float3(0f, 1f, 0f);
-        }
-        [System.Serializable]
-        public class Tuner {
-            public float speed = 1f;
+        public class Settings {
+            public GPUParticles particles;
+            public float3 center;
+            public float3 axis;
+            public float speed;
         }
         #endregion
     }

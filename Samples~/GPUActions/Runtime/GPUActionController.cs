@@ -25,7 +25,8 @@ namespace GPUParticleSystem.Samples.GPUActions {
         protected MaterialPropertyBlock matProps;
         protected GPUParticles gpart;
 
-        protected Dictionary<string, IAction> actionDic = new();
+        protected LinearAction.Settings linearSettings = new();
+        protected RotateAction.Settings rotateSettings = new();
         protected Coroutine coLinearAction, coRotateAction;
 
         #region unity
@@ -39,16 +40,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000),
                 matProps = matProps,
             };
-
-            actionDic.Clear();
-            if (links.linear != null) {
-                var linear = links.linear;
-                actionDic.Add(linear.GetType().Name, linear);
-            }
-            if (links.rotate != null) {
-                var rotate = links.rotate;
-                actionDic.Add(rotate.GetType().Name, rotate);
-            }
 
             events.onGpuParticleSystemCreated?.Invoke(gpart);
 
@@ -74,13 +65,17 @@ namespace GPUParticleSystem.Samples.GPUActions {
             var linear = links.linear;
             var linear_dir = links.linearDir;
             if (linear != null && linear_dir != null) {
-                linear.CurrPresets.forwardDir = linear_dir.forward;
+                linearSettings.particles = gpart;
+                linearSettings.forwardDir = linear_dir.forward;
+                linearSettings.speed = tuner.linearSpeed;
             }
             var rotate = links.rotate;
             var rotate_axis = links.rotationAxis;
             if (rotate != null && rotate_axis != null) {
-                rotate.CurrPresets.rotationAxis = rotate_axis.up;
-                rotate.CurrPresets.rotationCenter = rotate_axis.position;
+                rotateSettings.particles = gpart;
+                rotateSettings.speed = tuner.rotationSpeed;
+                rotateSettings.axis = rotate_axis.up;
+                rotateSettings.center = rotate_axis.position;
             }
 
             gpart.Update(Time.deltaTime);
@@ -126,28 +121,25 @@ namespace GPUParticleSystem.Samples.GPUActions {
         #endregion
 
         #region actions
-        IEnumerator CoGenericAction<T>(float duration = 360f) where T : IAction {
-            var typeName = typeof(T).Name;
-            if (!actionDic.TryGetValue(typeName, out var action)) {
-                Debug.LogError($"Action {typeName} not found");
-                yield break;
-            }
+        IEnumerator CoLinearAction(float duration = 360f) {
             yield return null;
 
             while (duration > 0f) {
                 var dt = Time.deltaTime;
-                action.Next(dt);
-
+                links.linear.Next(dt, linearSettings);
                 duration -= dt;
                 yield return null;
             }
-
-        }
-        IEnumerator CoLinearAction(float duration = 360f) {
-            return CoGenericAction<LinearAction>(duration);
         }
         IEnumerator CoRotateAction(float duration = 360f) {
-            return CoGenericAction<RotateAction>(duration);
+            yield return null;
+
+            while (duration > 0f) {
+                var dt = Time.deltaTime;
+                links.rotate.Next(dt, rotateSettings);
+                duration -= dt;
+                yield return null;
+            }
         }
 
         void StartLinearAction(float duration = 360f) {
@@ -196,7 +188,12 @@ namespace GPUParticleSystem.Samples.GPUActions {
         [System.Serializable]
         public class Tuner {
             public float duration = 60f;
-            public float init_uv_move = 0.2f;
+
+            [Header("Linear")]
+            public float linearSpeed = 1f;
+
+            [Header("Rotation")]
+            public float rotationSpeed = 1f;
         }
         #endregion
 

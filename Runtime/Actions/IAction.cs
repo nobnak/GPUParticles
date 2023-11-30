@@ -9,7 +9,5 @@ namespace GPUParticleSystem.Actions {
         string name { get; }
         bool enabled { get; set; }
 
-        void Next(float dt);
-
     }
 }

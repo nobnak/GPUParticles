@@ -74,13 +74,13 @@ namespace GPUParticleSystem.Samples.GPUActions {
             var linear = links.linear;
             var linear_dir = links.linearDir;
             if (linear != null && linear_dir != null) {
-                linear.CurrTuner.forwardDir = linear_dir.forward;
+                linear.CurrPresets.forwardDir = linear_dir.forward;
             }
             var rotate = links.rotate;
             var rotate_axis = links.rotationAxis;
             if (rotate != null && rotate_axis != null) {
-                rotate.CurrTuner.rotationAxis = rotate_axis.up;
-                rotate.CurrTuner.rotationCenter = rotate_axis.position;
+                rotate.CurrPresets.rotationAxis = rotate_axis.up;
+                rotate.CurrPresets.rotationCenter = rotate_axis.position;
             }
 
             gpart.Update(Time.deltaTime);

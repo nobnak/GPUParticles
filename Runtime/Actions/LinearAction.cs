@@ -11,6 +11,8 @@ namespace GPUParticleSystem.Actions {
 
         [SerializeField]
         protected Tuner tuner = new();
+        [SerializeField]
+        protected Presets presets = new();
 
         protected ComputeShader cs;
         protected int k_Linear;
@@ -24,6 +26,10 @@ namespace GPUParticleSystem.Actions {
                     tuner = value.DeepCopy();
                 }
             }
+        }
+        public Presets CurrPresets {
+            get => presets;
+            set => presets = value;
         }
         public GPUParticles particles { get; set; }
         #endregion
@@ -40,9 +46,9 @@ namespace GPUParticleSystem.Actions {
         public virtual void Next(float dt) {
             if (!isActiveAndEnabled || particles == null) return;
 
-            var forward = tuner.forwardDir;
             var gb_particle = particles.Particles;
 
+            var forward = presets.forwardDir;
 #if UNITY_EDITOR
             var forward_lensq = math.lengthsq(forward);
             if (forward_lensq < 0.99f || forward_lensq > 1.01f) {
@@ -67,12 +73,11 @@ namespace GPUParticleSystem.Actions {
         public static readonly int P_LinearDirection = Shader.PropertyToID("_LinearDirection");
 
         [System.Serializable]
-        public class  Links {
-            public Transform forward;
+        public class Presets {
+            public float3 forwardDir = float3.zero;
         }
         [System.Serializable]
         public class Tuner {
-            public float3 forwardDir = float3.zero;
             public float speed = 1f;
         }
         #endregion

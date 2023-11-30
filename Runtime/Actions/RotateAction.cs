@@ -11,6 +11,8 @@ namespace GPUParticleSystem.Actions {
 
         [SerializeField]
         protected Tuner tuner = new();
+        [SerializeField]
+        protected Presets presets = new();
 
         protected ComputeShader cs;
         protected int k_Rotate;
@@ -20,6 +22,10 @@ namespace GPUParticleSystem.Actions {
         public Tuner CurrTuner {
             get => tuner.DeepCopy();
             set => tuner = value.DeepCopy();
+        }
+        public Presets CurrPresets {
+            get => presets;
+            set => presets = value;
         }
         public GPUParticles particles { get; set; }
         #endregion
@@ -38,8 +44,8 @@ namespace GPUParticleSystem.Actions {
 
             var gb_particle = particles.Particles;
 
-            var rotation_axis = tuner.rotationAxis;
-            var rotation_center = tuner.rotationCenter;
+            var rotation_axis = presets.rotationAxis;
+            var rotation_center = presets.rotationCenter;
 #if UNITY_EDITOR
             var lensq_axis = math.lengthsq(rotation_axis);
             if (lensq_axis < 0.99f || 1.01f < lensq_axis)
@@ -73,9 +79,12 @@ namespace GPUParticleSystem.Actions {
         public static readonly float TWO_PI = 2f * math.PI;
 
         [System.Serializable]
-        public class Tuner {
+        public class Presets {
             public float3 rotationCenter = float3.zero;
             public float3 rotationAxis = new float3(0f, 1f, 0f);
+        }
+        [System.Serializable]
+        public class Tuner {
             public float speed = 1f;
         }
         #endregion

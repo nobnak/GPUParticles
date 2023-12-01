@@ -1,4 +1,4 @@
-# GPU Particle System basics for Unity
+# Minimal & extensible GPU Particle System UPM package for Unity
 
 ## Installation
 Released as an [UPM package](https://openupm.com/packages/jp.nobnak.gpu_particles/) on OpenUPM. 

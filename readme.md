@@ -6,3 +6,7 @@ Released as an [UPM package](https://openupm.com/packages/jp.nobnak.gpu_particle
 - Add scope "jp.nobnak"
 - Add packages under [LocalPackage](LocalPackages~) folder using "Add package from tarball" on Package Manager.
 - Add package "GPU Particles" in Package Manager.
+
+## Videos
+### Installation 
+[![Installation](http://img.youtube.com/vi/6Kn06Awqx1U/mqdefault.jpg)](https://youtu.be/6Kn06Awqx1U)

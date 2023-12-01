@@ -7,23 +7,24 @@ using UnityEngine;
 
 namespace GPUParticleSystem.Actions {
 
-    public class LinearAction : MonoBehaviour, IAction<LinearAction.Settings> {
+    public class LinearAction : System.IDisposable, IAction<LinearAction.Settings> {
 
         protected ComputeShader cs;
         protected int k_Linear;
         protected uint g_Linear;
 
-        #region unity
-        void OnEnable() {
+        public LinearAction() {
             cs = Resources.Load<ComputeShader>(CS_NAME);
             k_Linear = cs.FindKernel(K_Linear);
             cs.GetKernelThreadGroupSizes(k_Linear, out g_Linear, out _, out _);
         }
-        #endregion
 
-        #region interface
+        #region IAction
+        public string name => this.GetType().Name;
+        public bool enabled { get; set; } = true;
+
         public virtual void Next(GPUParticles particle, float dt, Settings s) {
-            if (!isActiveAndEnabled || particle == null) return;
+            if (!enabled || particle == null) return;
 
             var gb_particle = particle.Particles;
 
@@ -42,6 +43,11 @@ namespace GPUParticleSystem.Actions {
             var dispatchCount = GPUParticles.DispatcCount((int)gb_particle.count, g_Linear);
             cs.SetInts(GPUParticles.P_ThreadCount, (int)gb_particle.count);
             cs.Dispatch(k_Linear, dispatchCount, 1, 1);
+        }
+        #endregion
+
+        #region IDisposable Support
+        public void Dispose() {
         }
         #endregion
 

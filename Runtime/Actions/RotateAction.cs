@@ -7,23 +7,24 @@ using UnityEngine;
 
 namespace GPUParticleSystem.Actions {
 
-    public class RotateAction : MonoBehaviour, IAction<RotateAction.Settings> {
+    public class RotateAction : System.IDisposable, IAction<RotateAction.Settings> {
 
         protected ComputeShader cs;
         protected int k_Rotate;
         protected uint g_Rotate;
 
-        #region unity
-        void OnEnable() {
+        public RotateAction() {
             cs = Resources.Load<ComputeShader>(CS_NAME);
             k_Rotate = cs.FindKernel(K_Linear);
             cs.GetKernelThreadGroupSizes(k_Rotate, out g_Rotate, out _, out _);
         }
-        #endregion
 
-        #region interface
+        #region IAction
+        public string name => this.GetType().Name;
+        public bool enabled { get; set; } = true;
+
         public virtual void Next(GPUParticles particle, float dt, Settings settings) {
-            if (!isActiveAndEnabled || particle == null) return;
+            if (!enabled || particle == null) return;
 
             var gb_particle = particle.Particles;
 
@@ -50,6 +51,12 @@ namespace GPUParticleSystem.Actions {
             var dispatchCount = GPUParticles.DispatcCount(gb_particle.count, g_Rotate);
             cs.SetInts(GPUParticles.P_ThreadCount, gb_particle.count);
             cs.Dispatch(k_Rotate, dispatchCount, 1, 1);
+        }
+        #endregion
+
+        #region IDisposable Support
+        public void Dispose() {
+            throw new System.NotImplementedException();
         }
         #endregion
 

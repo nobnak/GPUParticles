@@ -1,4 +1,6 @@
 using GPUParticleSystem.Data;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -86,21 +88,26 @@ namespace GPUParticleSystem {
             cs.SetInt(P_ThreadCount, count);
             cs.Dispatch(k_init, dispatchCount, 1, 1);
         }
-        public void Add(params Particle[] particles) {
+        public void Add(IList<Particle> particles) {
             GraphicsBuffer.CopyCount(gb_indexPool, gb_count, (int)CounterByteOffset.IndexPool);
 
-            gb_add.SetData(particles);
+            if (particles is List<Particle>)
+                gb_add.SetData((List<Particle>)particles);
+            else
+                gb_add.SetData(particles.ToArray());
+
             cs.SetBuffer(k_add, P_ParticlesAdd, gb_add);
             cs.SetBuffer(k_add, P_Particles, gb_particles);
             cs.SetBuffer(k_add, P_IndexPoolC, gb_indexPool);
             cs.SetBuffer(k_add, P_IndexPoolA, gb_indexPool);
             cs.SetBuffer(k_add, P_CounterBuffer, gb_count);
 
-            var count = particles.Length;
+            var count = particles.Count;
             var dispatchCount = DispatcCount(count, g_add);
             cs.SetInt(P_ThreadCount, count);
             cs.Dispatch(k_add, dispatchCount, 1, 1);
         }
+        public void Add(params Particle[] particles) { Add(particles); }
         public void Update(float dt) {
             cs.SetBuffer(k_update, P_Particles, gb_particles);
             cs.SetBuffer(k_update, P_IndexPoolC, gb_indexPool);

@@ -6,7 +6,8 @@
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.InputSystem",
         "GPUParticles",
-        "GPUParticleData"
+        "GPUParticleData",
+        "Gist2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

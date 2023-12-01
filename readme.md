@@ -8,4 +8,5 @@ Released as an [UPM package](https://openupm.com/packages/jp.nobnak.gpu_particle
 - Add package "GPU Particles" in Package Manager.
 
 ## Videos
-- [Installation](https://youtu.be/6Kn06Awqx1U)
+### Installation 
+[![Installation](http://img.youtube.com/vi/6Kn06Awqx1U/mqdefault.jpg)](https://youtu.be/6Kn06Awqx1U)

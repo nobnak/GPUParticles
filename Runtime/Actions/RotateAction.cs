@@ -56,7 +56,6 @@ namespace GPUParticleSystem.Actions {
 
         #region IDisposable Support
         public void Dispose() {
-            throw new System.NotImplementedException();
         }
         #endregion
 

@@ -109,6 +109,14 @@ namespace GPUParticleSystem.Samples.GPUActions {
             changed.Reset();
             StopAllActions();
 
+            if (linear != null) {
+                linear.Dispose();
+                linear = null;
+            }
+            if (rotate != null) {
+                rotate.Dispose();
+                rotate = null;
+            }
             if (gpart != null) {
                 events.onGpuParticleSystemCreated?.Invoke(null);
                 gpart.Dispose();

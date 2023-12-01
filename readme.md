@@ -4,7 +4,7 @@
 Released as an [UPM package](https://openupm.com/packages/jp.nobnak.gpu_particles/) on OpenUPM. 
 - Add URL "https://package.openupm.com" in a Scoped Registory
 - Add scope "jp.nobnak"
-- Add packages under [LocalPackage](LocalPackages~) folder using "Add package from tarball" on Package Manager.
+- Add Particle data package as [Embedded package](https://docs.unity3d.com/2022.3/Documentation/Manual/Glossary.html#Embeddedpackage) from [LocalPackage](LocalPackages~) folder using "Add package from tarball" on Package Manager. Embedded package is mutable and particle data is now extensible.
 - Add package "GPU Particles" in Package Manager.
 
 ## Videos

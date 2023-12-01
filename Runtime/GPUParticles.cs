@@ -107,7 +107,9 @@ namespace GPUParticleSystem {
             cs.SetInt(P_ThreadCount, count);
             cs.Dispatch(k_add, dispatchCount, 1, 1);
         }
-        public void Add(params Particle[] particles) { Add(particles); }
+        public void Add(params Particle[] particles) { 
+            Add((IList<Particle>)particles); 
+        }
         public void Update(float dt) {
             cs.SetBuffer(k_update, P_Particles, gb_particles);
             cs.SetBuffer(k_update, P_IndexPoolC, gb_indexPool);

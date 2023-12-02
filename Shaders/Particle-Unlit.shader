@@ -1,7 +1,6 @@
 Shader "Unlit/Particle-Unlit" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
-        _ColorTex ("Color Texture", 2D) = "white" {}
         _Color ("Color", Color) = (1,1,1,1)
         _Size ("Size", float) = 1
     }
@@ -35,7 +34,6 @@ Shader "Unlit/Particle-Unlit" {
             #define FADE 0.5
 
             sampler2D _MainTex;
-            sampler2D _ColorTex;
 
             CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
@@ -77,8 +75,7 @@ Shader "Unlit/Particle-Unlit" {
 
                 float tot = p.lifespan;
                 float rem = p.life;
-                float4 color = smoothstep(0, FADE, rem) 
-                    * smoothstep(tot, tot - FADE, rem)
+                float4 color = smoothstep(0, FADE, rem) * smoothstep(tot, tot - FADE, rem)
                     * p.color;
 
                 for (int i = 0; i < 4; i++) {

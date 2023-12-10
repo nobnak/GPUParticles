@@ -66,7 +66,7 @@ Shader "Unlit/Particle-Unlit" {
                 }
 
                 Particle p = _Particles[instanceID];
-                if (p.activity <= 0) {
+                if (p.activity == 0) {
 					return;
 				}
 

@@ -85,7 +85,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 for (; readyToEmitCounter >= 1f; readyToEmitCounter--) {
                     var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
                     var p = new Particle() {
-                        activity = 1,
+                        activity = -1,
                         position = pos,
                         life = tuner.particle_lifespan,
                         lifespan = tuner.particle_lifespan,

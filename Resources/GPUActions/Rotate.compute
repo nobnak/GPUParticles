@@ -3,6 +3,8 @@
 
 #include_with_pragmas "../../ShaderLibrary/UpdateCommon.hlsl"
 
+#define ACTIVITY_ROTATION 2
+
 float4x4 _RotationMatrix;
 
 
@@ -11,7 +13,7 @@ void Rotate (uint3 id : SV_DispatchThreadID) {
 	if (id.x >= _ThreadCount) return;
 
 	Particle p = _Particles[id.x];
-	if (p.activity == 0) return;
+	if ((p.activity & ACTIVITY_ROTATION) == 0) return;
 
 	p.position = mul(_RotationMatrix, float4(p.position, 1)).xyz;
 

@@ -1,16 +1,20 @@
 {
-    "name": "GPUParticles.Samples.GPUParticleBillboard",
+    "name": "GPUParticles.GPUActions",
     "rootNamespace": "",
     "references": [
-        "GUID:8a882f2332bb73744871b1d804f14ae7",
-        "GUID:d8b63aba1907145bea998dd612889d6b"
+        "Unity.Mathematics",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.InputSystem",
+        "GPUParticles",
+        "GPUParticleData",
+        "Gist2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

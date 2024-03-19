@@ -1,6 +1,7 @@
-Shader "Unlit/Particle-Unlit" {
+Shader "Unlit/Particle-Unlit-uv" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
+        _ColorTex ("Color Texture", 2D) = "white" {}
         _Color ("Color", Color) = (1,1,1,1)
         _Size ("Size", float) = 1
     }
@@ -30,10 +31,11 @@ Shader "Unlit/Particle-Unlit" {
                 float4 color : COLOR;
             };
 
-            #include_with_pragmas "Packages/jp.nobnak.gpu_particles/Resources/RenderCommon.hlsl"
-            #define FADE 0.1
+            #include_with_pragmas "Packages/jp.nobnak.gpu_particles/ShaderLibrary/RenderCommon.hlsl"
+            #define FADE 0.5
 
             sampler2D _MainTex;
+            sampler2D _ColorTex;
 
             CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
@@ -60,18 +62,25 @@ Shader "Unlit/Particle-Unlit" {
 
             [maxvertexcount(4)]
             void geom (point appdata v[1], inout TriangleStream<v2f> stream) {
-                
-                Particle p = _Particles[v[0].instanceID];
+                uint instanceID = v[0].instanceID;
+                if (instanceID >= _ParticlesCount) {
+                    return;
+                }
+
+                Particle p = _Particles[instanceID];
                 if (p.activity <= 0) {
 					return;
 				}
 
                 float3 center_wc = mul(unity_ObjectToWorld, float4(p.position, 1)).xyz;
-                float size = p.size * _Size;
+                float size = _Size;
+                float time = _Time.y;
 
-                float tot = p.lifetime;
-                float rem = p.duration;
-                float4 color = smoothstep(0, FADE, rem) * smoothstep(tot, tot - FADE, rem);
+                float tot = p.lifespan;
+                float rem = p.life;
+                float4 color = smoothstep(0, FADE, rem) * smoothstep(tot, tot - FADE, rem)
+                    * p.color
+                    * tex2Dlod(_ColorTex, float4(p.uv, 0, 0));
 
                 for (int i = 0; i < 4; i++) {
                     float3 quadOffset_wc = mul(unity_CameraToWorld, quad[i]).xyz;

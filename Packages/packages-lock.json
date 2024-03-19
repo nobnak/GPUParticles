@@ -174,22 +174,21 @@
       "url": "https://package.openupm.com"
     },
     "jp.nobnak.gpu_particles": {
-      "version": "2.5.0",
+      "version": "file:jp.nobnak.gpu_particles",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "com.unity.mathematics": "1.2.6",
         "com.unity.render-pipelines.core": "14.0.9",
         "com.unity.inputsystem": "1.7.0",
         "jp.nobnak.gpu_particles.data": "1.1.0",
         "jp.nobnak.gist2": "1.4.3"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "jp.nobnak.gpu_particles.data": {
-      "version": "file:../Library/PackageCache/jp.nobnak.gpu_particles@2.5.0/LocalPackages~/jp.nobnak.gpu_particles.data-1.1.0.tgz",
+      "version": "file:jp.nobnak.gpu_particles.data",
       "depth": 0,
-      "source": "local-tarball",
+      "source": "embedded",
       "dependencies": {
         "com.unity.mathematics": "1.2.6",
         "com.unity.render-pipelines.core": "14.0.9"

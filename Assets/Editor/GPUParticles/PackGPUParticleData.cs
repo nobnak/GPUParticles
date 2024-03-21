@@ -38,14 +38,15 @@ namespace GPUParticleSystem.Editor {
             }
 
             if (request.Status != StatusCode.Success) {
-                Debug.LogError($"Packaging {PACKAGE_NAME} is failed.");
+                Debug.LogError($"Packaging {PKG_PARTICLE_DATA} is failed.");
             }
         }
 
         #region declarations
-        public const string PACKAGE_NAME = "jp.nobnak.gpu_particles.data";
-        public const string INPUT_FOLDER = "Packages/" + PACKAGE_NAME;
-        public const string OUTPUT_FOLDER = "Assets/Packages/GPUParticles/LocalPackages~";
+        public const string PKG_PARTICLE = "jp.nobnak.gpu_particles";
+        public const string PKG_PARTICLE_DATA = "jp.nobnak.gpu_particles.data";
+        public const string INPUT_FOLDER = "Packages/" + PKG_PARTICLE_DATA;
+        public const string OUTPUT_FOLDER = "Packages/" + PKG_PARTICLE + "/LocalPackages~";
         #endregion
     }
 

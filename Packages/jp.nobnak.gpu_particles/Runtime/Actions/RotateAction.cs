@@ -23,10 +23,11 @@ namespace GPUParticleSystem.Actions {
         public string name => this.GetType().Name;
         public bool enabled { get; set; } = true;
 
-        public virtual void Next(GPUParticles particle, float dt, Settings settings) {
+        public virtual void Next(GPUParticles particle, float4 time, Settings settings) {
             if (!enabled || particle == null) return;
 
             var gb_particle = particle.Particles;
+            var dt = time.x;
 
             var rotation_axis = settings.axis;
             var rotation_center = settings.center;

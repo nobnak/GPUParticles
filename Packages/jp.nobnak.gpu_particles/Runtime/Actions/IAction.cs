@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Unity.Mathematics;
 
 namespace GPUParticleSystem.Actions {
 
@@ -9,7 +7,8 @@ namespace GPUParticleSystem.Actions {
         string name { get; }
         bool enabled { get; set; }
 
-        void Next(GPUParticles particles, float dt, T s);
+        // time: dt, time
+        void Next(GPUParticles particles, float4 time, T s);
 
         public interface ISettings { }
     }

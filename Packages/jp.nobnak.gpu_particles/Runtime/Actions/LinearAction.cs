@@ -23,7 +23,7 @@ namespace GPUParticleSystem.Actions {
         public string name => this.GetType().Name;
         public bool enabled { get; set; } = true;
 
-        public virtual void Next(GPUParticles particle, float dt, Settings s) {
+        public virtual void Next(GPUParticles particle, float4 time, Settings s) {
             if (!enabled || particle == null) return;
 
             var gb_particle = particle.Particles;
@@ -37,7 +37,7 @@ namespace GPUParticleSystem.Actions {
 #endif
 
             cs.SetVector(P_LinearDirection, new float4(forward * s.speed, 0f));
-            cs.SetFloat(GPUParticles.P_DeltaTime, dt);
+            cs.SetFloat(GPUParticles.P_DeltaTime, time.x);
             cs.SetBuffer(k_Linear, GPUParticles.P_Particles, (GraphicsBuffer)gb_particle);
 
             var dispatchCount = GPUParticles.DispatcCount((int)gb_particle.count, g_Linear);

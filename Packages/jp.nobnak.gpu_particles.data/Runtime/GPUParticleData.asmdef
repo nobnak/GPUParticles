@@ -1,0 +1,17 @@
+{
+    "name": "GPUParticleData",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Mathematics",
+        "Unity.RenderPipelines.Core.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

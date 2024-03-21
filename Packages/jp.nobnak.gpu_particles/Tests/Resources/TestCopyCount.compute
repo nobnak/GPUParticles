@@ -1,0 +1,18 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Move
+
+
+
+uint _IndicesC_Count;
+AppendStructuredBuffer<uint> _IndicesA;
+ConsumeStructuredBuffer<uint> _IndicesC;
+
+
+
+[numthreads(64,1,1)]
+void Move (uint3 id : SV_DispatchThreadID) {
+	if (id.x >= _IndicesC_Count) return;
+
+	uint v = _IndicesC.Consume();
+	_IndicesA.Append(v);
+}

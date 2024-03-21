@@ -1,0 +1,17 @@
+{
+	"author": {
+		"name": "Nakata Nobuyuki",
+		"email": "nobu.nakata@gmail.com"
+	},
+	"name": "jp.nobnak.gpu_particles.data",
+	"displayName": "GPU Particle data",
+	"version": "1.1.0",
+
+	"samples": [
+	],
+
+	"dependencies": {
+		"com.unity.mathematics": "1.2.6",
+		"com.unity.render-pipelines.core": "14.0.9"
+	}
+}

@@ -1,3 +1,4 @@
+using GPUParticleSystem.Constants;
 using GPUParticleSystem.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,12 +111,13 @@ namespace GPUParticleSystem {
         public void Add(params Particle[] particles) { 
             Add((IList<Particle>)particles); 
         }
-        public void Update(float dt) {
+        public void Update(float dt, OperationMode mode = OperationMode.Default) {
             cs.SetBuffer(k_update, P_Particles, gb_particles);
             cs.SetBuffer(k_update, P_IndexPoolC, gb_indexPool);
             cs.SetBuffer(k_update, P_IndexPoolA, gb_indexPool);
 
             cs.SetFloat(P_DeltaTime, dt);
+            cs.SetInt(P_OperationMode, (int)mode);
 
             var count = gb_particles.count;
             var dispatchCount = DispatcCount(count, g_update);

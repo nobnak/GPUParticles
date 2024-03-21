@@ -33,14 +33,9 @@ void Update(uint3 id : SV_DispatchThreadID) {
 	Particle particle = _Particles[id.x];
 	if (particle.activity == 0) return;
 
-	[branch]
-	switch (_OperationMode) {
-		default: {
-			// Update the particle
-			particle.life -= _DeltaTime;
-			break;
-		}
-
+	// Update the particle
+	if ((_OperationMode & OPERATIONFLAGS_CONSUME_LIFE) != 0) {
+		particle.life -= _DeltaTime;
 	}
 
 	if (particle.life <= 0) {

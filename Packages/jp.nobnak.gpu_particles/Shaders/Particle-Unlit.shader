@@ -73,8 +73,8 @@ Shader "Unlit/Particle-Unlit" {
                 float3 center_wc = mul(unity_ObjectToWorld, float4(p.position, 1)).xyz;
                 float size = _Size;
 
-                float tot = p.lifespan;
-                float rem = p.life;
+                float tot = p.life.y;
+                float rem = p.life.x;
                 float4 color = smoothstep(0, FADE, rem) * smoothstep(tot, tot - FADE, rem)
                     * p.color;
 

@@ -87,8 +87,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
                     var p = new Particle() {
                         activity = -1,
                         position = pos,
-                        life = tuner.particle_lifespan,
-                        lifespan = tuner.particle_lifespan,
+                        life = new float4(tuner.particle_lifespan, tuner.particle_lifespan, 0, 0),
                         color = new(1, 1, 1, 1),
                     };
                     readyToEmit.Add(p);

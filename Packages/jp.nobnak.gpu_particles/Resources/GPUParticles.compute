@@ -35,10 +35,10 @@ void Update(uint3 id : SV_DispatchThreadID) {
 
 	// Update the particle
 	if ((_OperationMode & OPERATIONFLAGS_CONSUME_LIFE) != 0) {
-		particle.life -= _DeltaTime;
+		particle.life.x -= _DeltaTime;
 	}
 
-	if (particle.life <= 0) {
+	if (particle.life.x <= 0) {
 		// Add the index to the pool
 		_IndexPoolA.Append(id.x);
 		particle.activity = 0;

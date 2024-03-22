@@ -11,8 +11,7 @@ struct Particle
     int activity;
     float3 position; // x: x y: y z: z 
     float4 color; // x: x y: y z: z w: w 
-    float lifespan;
-    float life;
+    float4 life; // x: x y: y z: z w: w 
 };
 
 

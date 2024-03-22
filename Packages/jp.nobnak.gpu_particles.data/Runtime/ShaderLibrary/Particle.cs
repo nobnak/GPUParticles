@@ -12,7 +12,7 @@ namespace GPUParticleSystem.Data {
         public float3 position;
         public float4 color;
 
-        public float lifespan;
-        public float life;
+        // life: remaining life, life span, 0, 0
+        public float4 life;
     }
 }

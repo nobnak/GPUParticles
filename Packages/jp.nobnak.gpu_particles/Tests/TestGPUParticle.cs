@@ -68,8 +68,7 @@ namespace GPUParticleSystem.Tests {
                     var p = new Particle() {
                         activity = 1,
                         position = new float3(i, j, 0),
-                        lifespan = duration,
-                        life = duration,
+                        life = new float4(duration, duration, 0f, 0f),
                     };
                     particles_add.Add(p);
                 }

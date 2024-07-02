@@ -141,6 +141,23 @@ namespace GPUParticleSystem {
         public GraphicsBuffer Particles => gb_particles;
         #endregion
 
+        #region interfaces
+        public GPUParticles SetParticles(MaterialPropertyBlock matProps) {
+            matProps.SetInt(ShaderIDs.P_ParticlesCount, gb_particles != null ? gb_particles.count : 0);
+            matProps.SetBuffer(ShaderIDs.P_Particles, gb_particles);
+            return this;
+        }
+        public GPUParticles SetParticles(ComputeShader cs, int kernel) {
+            cs.SetInt(ShaderIDs.P_ParticlesCount, gb_particles != null ? gb_particles.count : 0);
+            cs.SetBuffer(kernel, ShaderIDs.P_Particles, gb_particles);
+            return this;
+        }
+        public GPUParticles SetGlobalParticles() {
+            Shader.SetGlobalInt(ShaderIDs.P_ParticlesCount, gb_particles != null ? gb_particles.count : 0);
+            Shader.SetGlobalBuffer(ShaderIDs.P_Particles, gb_particles);
+            return this;
+        }
+
         public AsyncGPUReadbackRequest GetParticlesAsync() {
             var count = gb_particles.count;
             return AsyncGPUReadback.Request(gb_particles);
@@ -156,6 +173,8 @@ namespace GPUParticleSystem {
             GraphicsBuffer.CopyCount(gb_activeIDs, gb_count, offset);
             return AsyncGPUReadback.Request(gb_count, Marshal.SizeOf<uint>(), offset);
         }
+        #endregion
+
         #region methods
         public static int DispatcCount(int count, uint groupSize) {
             return (count - 1) / (int)groupSize + 1;

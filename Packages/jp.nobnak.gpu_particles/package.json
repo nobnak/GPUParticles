@@ -5,14 +5,8 @@
   },
   "name": "jp.nobnak.gpu_particles",
   "displayName": "GPU Particles",
-  "version": "2.9.0",
-  "samples": [
-    {
-      "displayName": "Actions",
-      "description": "Compute-based particles' position animations",
-      "path": "Samples~/GPUActions"
-    }
-  ],
+  "version": "2.10.0",
+  "samples": [],
   "dependencies": {
     "com.unity.mathematics": "1.2.6",
     "com.unity.render-pipelines.core": "14.0.9",

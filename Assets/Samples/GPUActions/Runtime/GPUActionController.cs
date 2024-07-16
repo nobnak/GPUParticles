@@ -8,6 +8,8 @@ using GPUParticleSystem.Data;
 using GPUParticleSystem.Actions;
 using GPUParticleSystem.Util;
 using Gist2.Deferred;
+using GPUParticleSystem.Constants;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,6 +23,8 @@ namespace GPUParticleSystem.Samples.GPUActions {
         protected Events events = new();
         [SerializeField]
         protected Links links = new();
+        [SerializeField]
+        protected Presets presets = new();
         [SerializeField]
         protected Tuner tuner = new();
 
@@ -41,7 +45,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
         #region unity
         void OnEnable() {
             rand = new((uint)GetInstanceID());
-            gpart = new();
+            gpart = new(presets.Capacity);
             linear = new();
             rotate = new();
 
@@ -66,7 +70,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
 
             events.onGpuParticleSystemCreated?.Invoke(gpart);
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             StartCoroutine(PeriodicReport());
 #endif
         }
@@ -85,7 +89,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 for (; readyToEmitCounter >= 1f; readyToEmitCounter--) {
                     var pos = emitter.TransformPoint(rand.NextFloat3(Emitter_Min, Emitter_Max));
                     var p = new Particle() {
-                        activity = -1,
+                        activity = Activity.Active,
                         position = pos,
                         life = new float4(tuner.particle_lifespan, tuner.particle_lifespan, 0, 0),
                         color = new(1, 1, 1, 1),
@@ -98,10 +102,9 @@ namespace GPUParticleSystem.Samples.GPUActions {
                 }
             }
 
-            gpart.Update(Time.deltaTime);
+            gpart.Update(Time.deltaTime, presets.mode);
 
-            var particles = gpart.Particles;
-            matProps.SetParticles(particles);
+            gpart.SetParticles(matProps);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
         }
         void OnDisable() {
@@ -255,6 +258,14 @@ namespace GPUParticleSystem.Samples.GPUActions {
 
             public Transform linearDir;
             public Transform rotationAxis;
+        }
+        [System.Serializable]
+        public class Presets {
+            [Range(1, 20)]
+            public int po2capacity = 10;
+            public OperationMode mode = OperationMode.Default;
+
+            public int Capacity => math.clamp(1 << po2capacity, 1, 1 << 20);
         }
         [System.Serializable]
         public class Tuner {

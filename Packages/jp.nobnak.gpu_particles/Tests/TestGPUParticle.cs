@@ -66,7 +66,7 @@ namespace GPUParticleSystem.Tests {
                 var particles_add = new List<Particle>();
                 for (var i = 0; i < count_add; i++) {
                     var p = new Particle() {
-                        activity = 1,
+                        activity = Activity.Active,
                         position = new float3(i, j, 0),
                         life = new float4(duration, duration, 0f, 0f),
                     };

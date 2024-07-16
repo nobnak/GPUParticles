@@ -5,7 +5,7 @@
 #pragma kernel Index
 
 
-#include_with_pragmas "../ShaderLibrary/UpdateCommon.hlsl"
+#include "../ShaderLibrary/UpdateCommon.hlsl"
 
 
 [numthreads(64, 1, 1)]
@@ -31,18 +31,22 @@ void Update(uint3 id : SV_DispatchThreadID) {
 
 	// Get the particle
 	Particle particle = _Particles[id.x];
-	if (particle.activity == 0) return;
+    if (particle.activity == ACTIVITY_INACTIVE)
+        return;
 
 	// Update the particle
 	if ((_OperationMode & OPERATIONFLAGS_CONSUME_LIFE) != 0) {
 		particle.life.x -= _DeltaTime;
-	}
+    }
+    if (particle.life.x <= 0) {
+        particle.activity = ACTIVITY_DEAD;
+    }
 
-	if (particle.life.x <= 0) {
+    if (particle.activity == ACTIVITY_DEAD) {
 		// Add the index to the pool
+        particle.activity = ACTIVITY_INACTIVE;
 		_IndexPoolA.Append(id.x);
-		particle.activity = 0;
-	}
+    }
 
 	// Write the particle back
 	_Particles[id.x] = particle;
@@ -54,7 +58,8 @@ void Index(uint3 id : SV_DispatchThreadID) {
 
 	// Get the particle
 	Particle particle = _Particles[id.x];
-	if (particle.activity == 0) return;
+    if (particle.activity == ACTIVITY_INACTIVE)
+        return;
 
 	// Add the index to the pool
 	_ActiveIndexesA.Append(id.x);

@@ -1,7 +1,7 @@
 #pragma kernel Linear
 
 
-#include_with_pragmas "../../ShaderLibrary/UpdateCommon.hlsl"
+#include "../../ShaderLibrary/UpdateCommon.hlsl"
 
 #define ACTIVITY_LINEAR 1
 

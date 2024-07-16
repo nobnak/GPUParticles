@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -179,14 +178,17 @@ MonoBehaviour:
     emitter: {fileID: 1628756244}
     linearDir: {fileID: 1708642185}
     rotationAxis: {fileID: 1977901922}
+  presets:
+    po2capacity: 10
+    mode: 1
   tuner:
-    particle_lifespan: 10
+    particle_lifespan: 5
     automation: 3
     automation_emitsPerSec: 30
     linear_speed: 1
     rotation_speed: 0.1
     screw_rotationSpeed: 0.1
-    screw_linearSpeed: 1
+    screw_linearSpeed: 0.2
 --- !u!1 &441056531
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 725858048}
   - component: {fileID: 725858047}
+  - component: {fileID: 725858049}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -386,6 +389,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &725858049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725858046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1000056535
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,12 +871,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

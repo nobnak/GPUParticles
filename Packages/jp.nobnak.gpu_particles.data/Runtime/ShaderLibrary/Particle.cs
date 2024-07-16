@@ -6,9 +6,16 @@ using UnityEngine.Rendering;
 
 namespace GPUParticleSystem.Data {
 
+    [GenerateHLSL]
+    public enum Activity {
+        Inactive = 0,
+        Active = 1,
+        Dead = -1,
+    }
+
     [GenerateHLSL(needAccessors = false)]
     public struct Particle {
-        public int activity;
+        public Activity activity;
         public float3 position;
         public float4 color;
 

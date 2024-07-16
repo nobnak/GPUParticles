@@ -4,6 +4,13 @@
 
 #ifndef PARTICLE_CS_HLSL
 #define PARTICLE_CS_HLSL
+//
+// GPUParticleSystem.Data.Activity:  static fields
+//
+#define ACTIVITY_INACTIVE (0)
+#define ACTIVITY_ACTIVE (1)
+#define ACTIVITY_DEAD (-1)
+
 // Generated from GPUParticleSystem.Data.Particle
 // PackingRules = Exact
 struct Particle

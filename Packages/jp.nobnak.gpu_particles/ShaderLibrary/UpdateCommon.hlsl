@@ -17,11 +17,6 @@ AppendStructuredBuffer<uint> _ActiveIndexesA;
 #include "Packages/jp.nobnak.gpu_particles.data/Runtime/ShaderLibrary/Particle.cs.hlsl"
 RWStructuredBuffer<Particle> _Particles;
 RWStructuredBuffer<Particle> _ParticlesAdd;
-#include "Packages/jp.nobnak.gpu_particles/Runtime/Constants/OperationFlags.cs.hlsl"
-int _OperationMode;
-
-// Time
-float _DeltaTime;
 
 
 #endif

@@ -179,16 +179,11 @@ MonoBehaviour:
     linearDir: {fileID: 1708642185}
     rotationAxis: {fileID: 1977901922}
   presets:
-    po2capacity: 10
+    po2capacity: 6
     mode: 1
   tuner:
     particle_lifespan: 5
-    automation: 3
     automation_emitsPerSec: 30
-    linear_speed: 1
-    rotation_speed: 0.1
-    screw_rotationSpeed: 0.1
-    screw_linearSpeed: 0.2
 --- !u!1 &441056531
 GameObject:
   m_ObjectHideFlags: 0

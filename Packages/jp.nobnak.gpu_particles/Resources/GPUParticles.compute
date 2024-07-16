@@ -34,14 +34,6 @@ void Update(uint3 id : SV_DispatchThreadID) {
     if (particle.activity == ACTIVITY_INACTIVE)
         return;
 
-	// Update the particle
-	if ((_OperationMode & OPERATIONFLAGS_CONSUME_LIFE) != 0) {
-		particle.life.x -= _DeltaTime;
-    }
-    if (particle.life.x <= 0) {
-        particle.activity = ACTIVITY_DEAD;
-    }
-
     if (particle.activity == ACTIVITY_DEAD) {
 		// Add the index to the pool
         particle.activity = ACTIVITY_INACTIVE;

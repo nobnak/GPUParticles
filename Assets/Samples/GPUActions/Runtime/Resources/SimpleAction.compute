@@ -1,0 +1,24 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Update
+
+float _DeltaTime;
+#include "Packages/jp.nobnak.gpu_particles/ShaderLibrary/UpdateCommon.hlsl"
+
+[numthreads(64, 1, 1)]
+void Update(uint3 id : SV_DispatchThreadID) {
+    if (_ThreadCount <= id.x)
+        return;
+
+	// Get the particle
+    Particle particle = _Particles[id.x];
+    if (particle.activity == ACTIVITY_INACTIVE)
+        return;
+    
+    particle.life.x -= _DeltaTime;
+    if (particle.life.x <= 0) {
+        particle.activity = ACTIVITY_DEAD;
+    }
+
+	// Write the particle back
+    _Particles[id.x] = particle;
+}

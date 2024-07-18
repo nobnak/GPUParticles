@@ -5,7 +5,7 @@
   },
   "name": "jp.nobnak.gpu_particles.data",
   "displayName": "GPU Particle data",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "samples": [],
   "dependencies": {
     "com.unity.mathematics": "1.2.6",

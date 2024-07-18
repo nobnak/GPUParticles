@@ -14,7 +14,7 @@ ConsumeStructuredBuffer<uint> _IndexPoolC;
 AppendStructuredBuffer<uint> _ActiveIndexesA;
 
 // Particles
-#include "Packages/jp.nobnak.gpu_particles.data/Runtime/ShaderLibrary/Particle.cs.hlsl"
+#include "Packages/jp.nobnak.gpu_particles.data/ShaderLibrary/Data/Particle.cs.hlsl"
 RWStructuredBuffer<Particle> _Particles;
 RWStructuredBuffer<Particle> _ParticlesAdd;
 

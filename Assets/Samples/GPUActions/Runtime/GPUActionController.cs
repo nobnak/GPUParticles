@@ -93,7 +93,7 @@ namespace GPUParticleSystem.Samples.GPUActions {
             }
 
             simple.Update(gpart, dt);
-            gpart.Update(dt, OperationMode.Skip);
+            gpart.Update();
 
             gpart.SetParticles(matProps);
             Graphics.RenderPrimitives(renderParams, MeshTopology.Points, 1, gpart.Capacity);
@@ -162,7 +162,6 @@ namespace GPUParticleSystem.Samples.GPUActions {
         public class Presets {
             [Range(1, 20)]
             public int po2capacity = 10;
-            public OperationMode mode = OperationMode.Default;
 
             public int Capacity => math.clamp(1 << po2capacity, 1, 1 << 20);
         }
